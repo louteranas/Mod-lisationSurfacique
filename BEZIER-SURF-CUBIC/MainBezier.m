@@ -14,8 +14,8 @@ close all, clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %BezierSurf = load('surface1');  % read control points
 %BezierSurf = load('surface2'); % read control points
-%BezierSurf = load('surface3'); % read control points
-BezierSurf = load('surface4'); % read control points
+%BezierSurf = load('surface4'); % read control points
+BezierSurf = load('surface1'); % read control points
 %load('teapot'); %loading matrix B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 num_p=20;                    % nombre de valeurs de parametre en direction u et v
@@ -36,7 +36,7 @@ for k=1:np
     end
   end
 end
-B
+
 
 % La matrice B stocke tous les points de controle de tous les patchs
 % B(:,:,:,k) sont tous les points de controle du patch k
@@ -62,10 +62,10 @@ end
 
 % % ------------------------------------
 % % Normal vectors of Cubic Bezier patches 
-% nu=linspace(0,1,num_n); nv=nu;  %parametrisation uniforme (num_n+1)x (num_n+1) valeurs de parametre
-% for k=1:np
-%   N(:,:,:,k)=bezierPatchNormal(B(:,:,:,k),nu,nv); %vecteurs normal du patch k
-% end
+nu=linspace(0,1,num_n); nv=nu;  %parametrisation uniforme (num_n+1)x (num_n+1) valeurs de parametre
+for k=1:np
+  N(:,:,:,k)=bezierPatchNormal(B(:,:,:,k),nu,nv); %vecteurs normal du patch 
+end
 
 
 % ------------------------------------
@@ -76,5 +76,6 @@ end
 
 % ------------------------------------
 % Visualisation d'un patch/surface de Bezier
-%  plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
-  plotBezierSurface3D(B,S)		   % plot de tous les np patches
+%plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
+%quiver3(S(:,:,1,1), S(:,:,2,1), S(:,:,3,1), N(:,:,1,1), N(:,:,2,1), N(:,:,3,1))
+plotBezierSurface3D(B,S, N)		   % plot de tous les np patches
