@@ -23,7 +23,7 @@
 %  - smooth shading with wires
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function plotBezierSurface3D(B,S, N, I)
+function plotBezierSurface3D(B,S, N, I, C)
 
 [~, ~, ~, np]=size(B);
 [n,  ~]  = size(I);
@@ -51,7 +51,7 @@ axis equal;
 for k=1:np
     surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k),'FaceColor','g')
     quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
-    plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 title('\bf Surface de Bezier');
 view(3); box;  view(21,19)
@@ -61,7 +61,8 @@ view(3); box;  view(21,19)
 figure, hold on
 axis equal;
 for k=1:np
-    surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    %surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    surf(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k), C(:, :, k))
     quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
     plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
@@ -74,6 +75,7 @@ figure, hold
 axis equal;
 for k=1:np
     surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    %surf(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k), C(:, :, k))
     quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
     plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
