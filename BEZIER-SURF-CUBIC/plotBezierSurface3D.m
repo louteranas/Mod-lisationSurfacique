@@ -26,6 +26,7 @@
 function plotBezierSurface3D(B,S, N, I)
 
 [~, ~, ~, np]=size(B);
+[n,  ~]  = size(I);
 % % np: number of patches
 
 str1='\bf Control Point';
@@ -39,7 +40,7 @@ axis equal;
 for k=1:np
     surface(B(:,:,1,k),B(:,:,2,k),B(:,:,3,k),'FaceColor','y')   
     quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
-    plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 title('\bf Reseau de controle');
 view(3); box;  view(21,19)

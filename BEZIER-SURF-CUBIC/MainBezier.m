@@ -15,7 +15,7 @@ close all, clear all
 %BezierSurf = load('surface1');  % read control points
 %BezierSurf = load('surface2'); % read control points
 %BezierSurf = load('surface4'); % read control points
-BezierSurf = load('surface4'); % read control points
+BezierSurf = load('surface1'); % read control points
 %load('teapot'); %loading matrix B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 num_p=20;                    % nombre de valeurs de parametre en direction u et v
@@ -79,6 +79,14 @@ for k =1:np
 end
 
 
+
+% ------------------------------------
+% Computing courbure
+
+Courbure =[]
+for k =1:np
+    Courbure(:, :, k) =bezierCourbure(N(:,:,:,k), B(:,:,:,k), u,  v);
+end
 
 % ------------------------------------
 % Visualisation d'un patch/surface de Bezier
