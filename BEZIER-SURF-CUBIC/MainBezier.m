@@ -15,7 +15,7 @@ close all, clear all
 %BezierSurf = load('surface1');  % read control points
 %BezierSurf = load('surface2'); % read control points
 %BezierSurf = load('surface4'); % read control points
-BezierSurf = load('surface1'); % read control points
+BezierSurf = load('surface4'); % read control points
 %load('teapot'); %loading matrix B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 num_p=20;                    % nombre de valeurs de parametre en direction u et v
@@ -52,7 +52,6 @@ end
 u = linspace(0,1,num_p); 
 v = u; 
 
-
 %  ------------------------------------
 % Cubic Bezier patches 
 for k=1:np
@@ -68,9 +67,16 @@ for k=1:np
 end
 
 
+
 % ------------------------------------
 % Computing Isophotes
-  
+L  = [0 1 0];
+L = L/norm(L);
+c = 0.1;
+epsilon = 0.05;
+for k =1:np
+    I(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, c, epsilon, u,  v);
+end
 
 
 
@@ -78,4 +84,4 @@ end
 % Visualisation d'un patch/surface de Bezier
 %plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
 %quiver3(S(:,:,1,1), S(:,:,2,1), S(:,:,3,1), N(:,:,1,1), N(:,:,2,1), N(:,:,3,1))
-plotBezierSurface3D(B,S, N)		   % plot de tous les np patches
+plotBezierSurface3D(B,S, N,I)		   % plot de tous les np patches
