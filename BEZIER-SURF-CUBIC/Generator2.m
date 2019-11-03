@@ -36,13 +36,12 @@ for k=0:3
     end
 end
 
-for k=0:3
-    for i=0:3
-        if mod(i, 3) == 0
-            fprintf(fileID,formatSpec,xC + i, yC+3, zC + k);
-        else 
-            fprintf(fileID,formatSpec,xC + i, yC+3 +2, zC + k);
-        end
-    end
-end
-
+%for k=0:3
+ %   for i=0:3
+ %       if mod(i, 3) == 0
+ %           fprintf(fileID,formatSpec,xC + i, yC+3, zC + k);
+  %      else 
+  %          fprintf(fileID,formatSpec,xC + i, yC+3 +2, zC + k);
+   %     end
+   % end
+%end
