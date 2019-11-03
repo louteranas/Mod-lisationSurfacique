@@ -15,7 +15,7 @@ close all, clear all
 %BezierSurf = load('surface1');  % read control points
 %BezierSurf = load('surface2'); % read control points
 %BezierSurf = load('surface4'); % read control points
-BezierSurf = load('surface1'); % read control points
+BezierSurf = load('surface3'); % read control points
 %load('teapot'); %loading matrix B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 num_p=20;                    % nombre de valeurs de parametre en direction u et v
@@ -82,8 +82,6 @@ end
 
 % ------------------------------------
 % Computing courbure
-
-Courbure =[]
 for k =1:np
     Courbure(:, :, k) =bezierCourbure(N(:,:,:,k), B(:,:,:,k), u,  v);
 end
@@ -92,4 +90,4 @@ end
 % Visualisation d'un patch/surface de Bezier
 %plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
 %quiver3(S(:,:,1,1), S(:,:,2,1), S(:,:,3,1), N(:,:,1,1), N(:,:,2,1), N(:,:,3,1))
-plotBezierSurface3D(B,S, N,I)		   % plot de tous les np patches
+plotBezierSurface3D(B,S, N,I, Courbure)		   % plot de tous les np patches
