@@ -23,9 +23,10 @@
 %  - smooth shading with wires
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function plotBezierSurface3D(B,S)
+function plotBezierSurface3D(B,S, N, I, C)
 
 [~, ~, ~, np]=size(B);
+[n,  ~]  = size(I);
 % % np: number of patches
 
 str1='\bf Control Point';
@@ -37,7 +38,9 @@ str3='\bf Surface (bi-directional Bezier curve)';
 figure, hold on
 axis equal;
 for k=1:np
-    surface(B(:,:,1,k),B(:,:,2,k),B(:,:,3,k),'FaceColor','y')
+    surface(B(:,:,1,k),B(:,:,2,k),B(:,:,3,k),'FaceColor','y')   
+    %quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 title('\bf Reseau de controle');
 view(3); box;  view(21,19)
@@ -47,6 +50,8 @@ figure, hold on
 axis equal;
 for k=1:np
     surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k),'FaceColor','g')
+    %quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 title('\bf Surface de Bezier');
 view(3); box;  view(21,19)
@@ -57,6 +62,9 @@ figure, hold on
 axis equal;
 for k=1:np
     surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    %surf(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k), C(:, :, k))
+    %quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 shading interp
 title('\bf Surface de Bezier avec Interpolated Shading');
@@ -66,10 +74,21 @@ view(3); box;  view(21,19)
 figure, hold 
 axis equal;
 for k=1:np
-    surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    %surface(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k))
+    surf(S(:,:,1,k),S(:,:,2,k),S(:,:,3,k), C(:, :, k))
+    %quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
+    %plot3(I(:,1, k), I(:,2,k), I(:,3,k),'Color','r');
 end
 shading faceted
 title('\bf Surface de Bezier avec Faceted Shading');
 view(3); box;  view(21,19)
 % %-----------------------------------------------% 
 
+% % Surface avec faceted shading
+%figure, hold 
+%axis equal;
+%for k=1:np
+%    quiver3(S(:,:,1,k), S(:,:,2,k), S(:,:,3,k), N(:,:,1,k), N(:,:,2,k), N(:,:,3,k))
+%end
+%title('\bf Champs de normales');
+%view(3); box;  view(21,19)

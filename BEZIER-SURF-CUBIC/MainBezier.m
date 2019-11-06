@@ -14,12 +14,12 @@ close all, clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %BezierSurf = load('surface1');  % read control points
 %BezierSurf = load('surface2'); % read control points
-%BezierSurf = load('surface3'); % read control points
-BezierSurf = load('surface4'); % read control points
+%BezierSurf = load('surface4'); % read control points
+BezierSurf = load('surface1'); % read control points
 %load('teapot'); %loading matrix B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-num_p=20;                    % nombre de valeurs de parametre en direction u et v
-num_n=20;		     % plus num_p est grand plus la surface paraitra lisse
+num_p=30;                    % nombre de valeurs de parametre en direction u et v
+num_n=30;		     % plus num_p est grand plus la surface paraitra lisse
 			     % et plus le calcul sera long
 
 %-------------------------------------------------
@@ -36,7 +36,7 @@ for k=1:np
     end
   end
 end
-B
+
 
 % La matrice B stocke tous les points de controle de tous les patchs
 % B(:,:,:,k) sont tous les points de controle du patch k
@@ -52,7 +52,6 @@ B
 u = linspace(0,1,num_p); 
 v = u; 
 
-
 %  ------------------------------------
 % Cubic Bezier patches 
 for k=1:np
@@ -62,19 +61,62 @@ end
 
 % % ------------------------------------
 % % Normal vectors of Cubic Bezier patches 
-% nu=linspace(0,1,num_n); nv=nu;  %parametrisation uniforme (num_n+1)x (num_n+1) valeurs de parametre
-% for k=1:np
-%   N(:,:,:,k)=bezierPatchNormal(B(:,:,:,k),nu,nv); %vecteurs normal du patch k
-% end
+nu=linspace(0,1,num_n); nv=nu;  %parametrisation uniforme (num_n+1)x (num_n+1) valeurs de parametre
+for k=1:np
+  N(:,:,:,k)=bezierPatchNormal(B(:,:,:,k),nu,nv); %vecteurs normal du patch 
+end
+
 
 
 % ------------------------------------
 % Computing Isophotes
-  
-
+%L  = [1 1 -1]; % surface 4
+L  = [1 -4 0]; % surface 2
+L = L/norm(L);
+c = 0.1;
+epsilon = 0.05;
+I1=[];
+npl = 1;
+for k =1:npl
+    I1(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, c, epsilon, u,  v);
+end
+for k =1:npl
+    I2(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.15, epsilon, u,  v);
+end
+for k =1:npl
+    I3(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.2, epsilon, u,  v);
+end
+for k =1:npl
+    I4(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.25, epsilon, u,  v);
+end
+for k =1:npl
+    I5(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.3, epsilon, u,  v);
+end
+for k =1:npl
+    I6(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.35, epsilon, u,  v);
+end
+for k =1:npl
+    I7(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.4, epsilon, u,  v);
+end
+for k =1:npl
+    I8(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.45, epsilon, u,  v);
+end
+for k =1:npl
+    I9(:, :, k) =bezierIsophote(N(:,:,:,k), S(:,:,:,k), L, 0.5, epsilon, u,  v);
+end
 
 
 % ------------------------------------
+% Computing courbure
+%for k =1:np
+%    Courbure(:, :, k) =bezierCourbure(N(:,:,:,k), B(:,:,:,k), u,  v);
+%end
+
+% ------------------------------------
 % Visualisation d'un patch/surface de Bezier
-%  plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
-  plotBezierSurface3D(B,S)		   % plot de tous les np patches
+%plotBezierPatch3D(B(:,:,:,2),S(:,:,:,2)) % plot d'un seul patch k
+%plotBezierSurface3D(B,S, N,I, Courbure)		   % plot de tous les np patches
+%plotBezierCourbures(B,S, Courbure)
+plotBezierIsophotes(B,S,I1, I2, I3, I4, I5, I6, I7, I8, I9)%, Courbure)
+%plotBezierIsophote(B,S,I2)%, Courbure
+%quiver3(0, L(1), L(2), L(3))%'color', 'r');

@@ -8,24 +8,13 @@ yC = 4;
 zC = 5;
 for k=0:3
     for i=0:3
-       fprintf(fileID,formatSpec,xC + i, yC , zC + k);
-    end
-end
-
-for k=0:3
-    for i=0:3
-       fprintf(fileID,formatSpec,xC , yC + i, zC +k);
-    end
-end
-
-for k=0:3
-    for i=0:3
-        fprintf(fileID,formatSpec,xC + 3, yC + i, zC +k);
-    end
-end
-
-for k=0:3
-    for i=0:3
-       fprintf(fileID,formatSpec,xC + i, yC+3, zC + k);
+       %if i == 1 && k == 1
+       %   fprintf(fileID,formatSpec,xC + i, yC +1 , zC + k); 
+       %end
+       if i == 2 && k == 2
+          fprintf(fileID,formatSpec,xC + i, yC-10 , zC + k);
+       else
+          fprintf(fileID,formatSpec,xC + i, yC , zC + k);
+       end
     end
 end

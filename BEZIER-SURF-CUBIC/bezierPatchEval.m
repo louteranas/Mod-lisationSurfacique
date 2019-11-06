@@ -15,8 +15,8 @@
 %    La structure de S est similaire a celle de B.
 %    Taille de S: |u|x|v|x3
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function S = bezierpatchinterp(B,u,v)
-
+%function S = bezierpatchinterp(B,u,v)
+function S = bezierPatchEval(B,u,v)
 S=[];
 
 % Matrice de changement de base
