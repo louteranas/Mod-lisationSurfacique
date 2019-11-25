@@ -29,4 +29,4 @@ class Mesh:
                     self.facesIndexs.append((ligneData[1], ligneData[2], ligneData[3]))
 
     def draw(self):
-        ## TODO
+        return
