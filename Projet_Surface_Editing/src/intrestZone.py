@@ -18,7 +18,7 @@ class IntrestZone:
         for point in self.originalMesh.points:
             if(self.computeDistance(origin, point) < distance):
                 self.intrestPoints.append(point)
-                numberOfPoints += 1
+                self.numberOfPoints += 1
 
     def draw(self):
         print(self.numberOfPoints)
