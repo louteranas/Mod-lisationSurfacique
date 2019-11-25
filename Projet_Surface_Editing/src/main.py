@@ -9,7 +9,7 @@ from affichage import *
 def main():
     myMesh = Mesh()
     myMesh.parseEntry(sys.argv[1])
-    myMesh.draw()
-    #affichage(myMesh)
+    #myMesh.draw()
+    affichage(myMesh)
 
 main()

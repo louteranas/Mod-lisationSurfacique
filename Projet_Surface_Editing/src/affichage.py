@@ -37,7 +37,7 @@ def object(myMesh):
     for face in myMesh.facesIndexs:
 
         for vertex in face:
-            glVertex3fv(face[vertex])
+            glVertex3fv(myMesh.points[vertex])
     glEnd()
 
 
@@ -64,9 +64,9 @@ def affichage(myMesh):
                 pygame.quit()
                 quit()
 
-        glRotatef(1, 3, 1, 1)
+        #glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Cube()
-        #object(myMesh)
+        #Cube()
+        object(myMesh)
         pygame.display.flip()
         pygame.time.wait(10)
