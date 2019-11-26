@@ -6,7 +6,7 @@ from itertools import *
 
 class IntrestZone:
     def __init__(self, mesh):
-        self.originalMesh = mesh 
+        self.originalMesh = mesh
         self.numberOfPoints = 0
         self.intrestPoints = []
         self.faces = []

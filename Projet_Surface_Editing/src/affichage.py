@@ -1,9 +1,11 @@
 import pygame
 from pygame.locals import *
-
+import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from mesh import Mesh
+from test_affichage import *
+from itertools import *
 
 verticies = (
     (1, -1, -1),
@@ -32,12 +34,11 @@ edges = (
     )
 
 
-def object(myMesh):
+def object(myMesh, face):
     glBegin(GL_LINES)
-    for face in myMesh.facesIndexs:
-
-        for vertex in face:
-            glVertex3fv(myMesh.points[vertex])
+    face2 = face + (face[0],)
+    for vertex in face2:
+        glVertex3fv(myMesh.points[vertex])
     glEnd()
 
 
@@ -67,6 +68,7 @@ def affichage(myMesh):
         #glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         #Cube()
-        object(myMesh)
+        for face in myMesh.facesIndexs:
+            object(myMesh,face)
         pygame.display.flip()
         pygame.time.wait(10)
