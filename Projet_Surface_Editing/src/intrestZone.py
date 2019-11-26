@@ -24,11 +24,11 @@ class IntrestZone:
                 self.numberOfPoints += 1
         self.faces = list(set(self.faces))
 
-    def getFacesInInterestZone(self, index){
+    def getFacesInInterestZone(self, index):
         for face in self.originalMesh.facesIndexs:
             if(index in face):
                 self.faces.append(face)
-    }
+    
 
     def draw(self):
         print(self.numberOfPoints)
