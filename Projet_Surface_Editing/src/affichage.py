@@ -4,7 +4,7 @@ import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from mesh import Mesh
-from test_affichage import *
+
 from itertools import *
 from intrestZone import *
 
