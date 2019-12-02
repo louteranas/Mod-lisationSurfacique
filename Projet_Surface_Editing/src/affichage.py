@@ -36,6 +36,8 @@ edges = (
     (5,7)
     )
 
+
+
 def Cube():
     glBegin(GL_LINES)
     for edge in edges:
@@ -61,7 +63,7 @@ def object(myMesh, face, color):
 def IdentityMat44():
     return np.matrix(np.identity(4), copy=False, dtype='float32')
 
-def affichage(myMesh):
+def affichage(myMesh, zone):
     pygame.init()
     display = (800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
@@ -130,8 +132,16 @@ def affichage(myMesh):
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         color_white = (1.0, 1.0, 1.0)
+        color_red = (1.0, 0.0, 0.0)
+        color_blue = (0.0, 0.0, 1.0)
+        color_green = (0.0, 1.0, 0.0)
+        
+        # for face in myMesh.facesIndexs:
+        #    object(myMesh,face, color_white)
         for face in myMesh.facesIndexs:
-           object(myMesh,face, color_white)
+            object(myMesh,face, color_white)
+        for face in zone.faces:
+            object(myMesh,face, color_red)
         glPopMatrix()
 
         pygame.display.flip()

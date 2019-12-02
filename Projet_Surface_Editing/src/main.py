@@ -15,9 +15,10 @@ def main():
 
 
     zone = IntrestZone(myMesh)
-    zone.findPointsBydistance(myMesh.points[0], 1)
+    #zone.findPointsBydistance(myMesh.points[0], 1)
+    zone.findPointsByVoisins(5, 5)
     zone.draw()
-    affichage(myMesh)
+    affichage(myMesh, zone)
 
 
 main()
