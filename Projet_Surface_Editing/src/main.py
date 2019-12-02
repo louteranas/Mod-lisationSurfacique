@@ -10,15 +10,15 @@ from affichage import *
 def main():
     myMesh = Mesh()
     myMesh.parseEntry(sys.argv[1])
-    #myMesh.draw()
+    myMesh.draw()
 
 
 
-    zone = IntrestZone(myMesh)
-    #zone.findPointsBydistance(myMesh.points[0], 1)
-    zone.findPointsByVoisins(5, 5)
-    zone.draw()
-    affichage(myMesh, zone)
+    # zone = IntrestZone(myMesh)
+    # #zone.findPointsBydistance(myMesh.points[0], 1)
+    # zone.findPointsByVoisins(5, 5)
+    # zone.draw()
+    # affichage(myMesh, zone)
 
 
 main()

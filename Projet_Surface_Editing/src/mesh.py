@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import numpy as np
 class Mesh:
     def __init__(self):
         self.numberOfPoints = 0
@@ -28,7 +28,7 @@ class Mesh:
                     self.points.append((float(ligneData[0]), float(ligneData[1]), float(ligneData[2])))
                 if(len(ligneData)==4):
                     self.facesIndexs.append((int(ligneData[1]), int(ligneData[2]), int(ligneData[3])))
-            self.adjacentMatrix = [[0 for _ in range(self.numberOfPoints)] for _ in range(self.numberOfPoints)]
+            self.adjacentMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
         self.computeAdjacentMatrix()
 
     def computeAdjacentMatrix(self):
@@ -48,13 +48,8 @@ class Mesh:
                 voisins.append(i)
         return voisins
 
+
     def getDegreeVoisins(self, index, degree):
-        # if(degree == 1):
-        #     print("coucou")
-        #     return self.getFirstVoisins(index)
-        # voisins = self.getFirstVoisins(index)
-        # for voisin in voisins:
-        #     return voisins.extend(self.getVoisins(voisin, degree-1))
         firstVoisins = self.getFirstVoisins(index)
         voisins = [firstVoisins]
         for _ in range(degree-1):
@@ -74,10 +69,35 @@ class Mesh:
         allVoisins = list(set(allVoisins))
         return allVoisins
 
+    def vertexsDegree(self):
+        return [sum(self.adjacentMatrix[i]) for i in range(self.numberOfPoints)]
 
+    def computeVertexsDegreeMatrix(self):
+        vertexsDegree = self.vertexsDegree()
+        vertexsDegreeMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
+        for i in range(self.numberOfPoints):
+            vertexsDegreeMatrix[i][i] = vertexsDegree[i]
+        return vertexsDegreeMatrix
+
+    def computeLaplacianMatrix(self):
+        return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVertexsDegreeMatrix()), self.adjacentMatrix)
+    
+    def computeLaplacienVertexs(self):
+        vertexXT = np.transpose(np.asarray([vertex[0] for vertex in self.points]))
+        vertexYT = np.transpose(np.asarray([vertex[1] for vertex in self.points]))
+        vertexZT = np.transpose(np.asarray([vertex[2] for vertex in self.points]))
+        laplacienMatrix = self.computeLaplacianMatrix()
+        laplacienvertexsX = np.dot(laplacienMatrix, vertexXT)
+        laplacienvertexsY = np.dot(laplacienMatrix, vertexYT)
+        laplacienvertexsZ = np.dot(laplacienMatrix, vertexZT)
+        return [[laplacienvertexsX[i], laplacienvertexsY[i], laplacienvertexsZ[i]] for i in range(self.numberOfPoints)]
 
     def draw(self):
-        for face in self.facesIndexs:
-            print('face: ')
-            for vertex in face:
-                print(vertex)
+            # for face in self.facesIndexs:
+            #     print('face: ')
+            #     for vertex in face:
+            #         print(vertex)
+        # print(self.computeLaplacienVertexs())
+        #print(self.computeLaplacianMatrix())
+        #print(self.computeVertexsDegreeMatrix())
+        #print(self.adjacentMatrix)
