@@ -26,16 +26,24 @@ class IntrestZone:
 
     def findPointsByVoisins(self, origin, degree):
         self.intrestPoints = self.originalMesh.getAllVoisins(origin, degree)
+        if(origin not in self.intrestPoints):
+            self.intrestPoints.append(origin)
         #print(self.intrestPoints)
         for index in self.intrestPoints:
             self.getFacesInInterestZone(index)
         self.numberOfPoints = len(self.intrestPoints)
         self.faces = list(set(self.faces))
 
-    def getFacesInInterestZone(self, index):
+    def getFacesInInterestZone(self, vertexIndex):
         for face in self.originalMesh.facesIndexs:
-            if(index in face):
-                self.faces.append(face)
+            if(vertexIndex in face):
+                index = face.index(vertexIndex)
+                goodFace = True
+                for i in range(3):
+                    if i != index and not(face[i] in self.intrestPoints):
+                        goodFace = False
+                if goodFace:
+                    self.faces.append(face)
 
 
     def draw(self):
