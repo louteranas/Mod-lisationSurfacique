@@ -38,11 +38,10 @@ class Mesh:
             self.adjacentMatrix[faceIndexs[1]][faceIndexs[2]] = 1
             self.adjacentMatrix[faceIndexs[2]][faceIndexs[1]] = 1
             self.adjacentMatrix[faceIndexs[2]][faceIndexs[0]] = 1
-            self.adjacentMatrix[faceIndexs[0]][faceIndexs[2]] = 1   
-    
+            self.adjacentMatrix[faceIndexs[0]][faceIndexs[2]] = 1
+
     def getFirstVoisins(self, index):
         voisins = []
-        print(index)
         for i in range(self.numberOfPoints):
             if(self.adjacentMatrix[index][i] == 1):
                 voisins.append(i)
@@ -59,7 +58,7 @@ class Mesh:
             degreeVoisins = list(set(degreeVoisins))
             voisins.append(degreeVoisins)
         return voisins
-    
+
     def getAllVoisins(self, index, degree):
         degreeVoisins = self.getDegreeVoisins(index, degree)
         allVoisins = []
@@ -81,7 +80,7 @@ class Mesh:
 
     def computeLaplacianMatrix(self):
         return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVerticesDegreeMatrix()), self.adjacentMatrix)
-    
+
     def computeLaplacienVertices(self, points):
         vertexXT = np.transpose(np.asarray([vertex[0] for vertex in points]))
         vertexYT = np.transpose(np.asarray([vertex[1] for vertex in points]))
