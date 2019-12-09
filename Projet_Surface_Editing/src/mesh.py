@@ -9,7 +9,7 @@ class Mesh:
         self.adjacentMatrix = []
 
 
-    def parseEntry(self, argFile):
+    def parseEntry(self, argFile = "../models/sphere.off"):
         with open(argFile, 'r') as argument:
             data = argument.read()
             lignes = data.split("\n")

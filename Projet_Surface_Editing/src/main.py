@@ -9,7 +9,7 @@ from affichage import *
 
 def main():
     myMesh = Mesh()
-    myMesh.parseEntry(sys.argv[1])
+    myMesh.parseEntry(sys.argv[1]) if len(sys.argv) > 1 else myMesh.parseEntry()
     myMesh.draw()
 
 
