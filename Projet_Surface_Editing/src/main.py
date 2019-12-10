@@ -4,6 +4,7 @@ from mesh import Mesh
 from intrestZone import IntrestZone
 import sys
 from affichage import *
+from minimization import *
 
 
 
@@ -18,7 +19,8 @@ def main():
      # zone.findPointsBydistance(myMesh.points[0], 1)
     zone.findPointsByVoisins(30, 1)
     # zone.draw()
-    affichage(myMesh, zone)
+    #affichage(myMesh, zone)
+    res = minimizationError(myMesh, zone, 30, (10,10,8))
 
 
 main()

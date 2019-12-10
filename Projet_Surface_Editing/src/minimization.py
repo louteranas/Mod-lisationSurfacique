@@ -27,18 +27,18 @@ def errorFonctional(x, delta, monMesh, maZone, originIndex, nouveauPoint):
     return (normeCarreList(delta, laplacientCoords) + normeCarrePoint(x, originIndex, nouveauPoint))
 
 def computeLaplacient(x, monMesh, maZone):
-    laplacientCoords = [0 for _ in range(3*len(maZone.interestPoints))]
-    for i in range(0, 3*len(maZone.interestPoints), 3):
-        index = maZone.interestPoints[i//3]
-        laplacientCoords[i] = monMesh.points[index][0]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][0] for voisinIndex in maZone.getFirstVoisins(index)]))
-        laplacientCoords[i+1] = monMesh.points[index][1]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][1] for voisinIndex in maZone.getFirstVoisins(index)]))
-        laplacientCoords[i+2] = monMesh.points[index][2]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][2] for voisinIndex in maZone.getFirstVoisins(index)]))
+    laplacientCoords = [0 for _ in range(3*len(maZone.intrestPoints))]
+    for i in range(0, 3*len(maZone.intrestPoints), 3):
+        index = maZone.intrestPoints[i//3]
+        laplacientCoords[i] = monMesh.points[index][0]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][0] for voisinIndex in monMesh.getFirstVoisins(index)]))
+        laplacientCoords[i+1] = monMesh.points[index][1]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][1] for voisinIndex in monMesh.getFirstVoisins(index)]))
+        laplacientCoords[i+2] = monMesh.points[index][2]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][2] for voisinIndex in monMesh.getFirstVoisins(index)]))
     return laplacientCoords
 
 
 def minimizationError(monMesh, maZone, originPointIndex, nouveauPoint):
     #calcul de delta: point de la zone d'interet avant transformation en Laplacian
     mesLap = monMesh.computeLaplacianVertices()
-    delta = [mesLap[i][j] for i in maZone.interestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
-    x0 = [monMesh.points[i][j] for i in maZone.interestPoints for j in range(3)]
+    delta = [mesLap[i][j] for i in maZone.intrestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
+    x0 = [monMesh.points[i][j] for i in maZone.intrestPoints for j in range(3)]
     return minimize(errorFonctional, x0, args=(delta, monMesh, maZone, originPointIndex, nouveauPoint),method='nelder-mead',options={'xtol': 1e-8, 'disp': True})
