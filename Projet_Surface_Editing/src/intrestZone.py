@@ -26,7 +26,8 @@ class IntrestZone:
 
     def findPointsByVoisins(self, origin, degree):
         self.intrestPoints = self.originalMesh.getAllVoisins(origin, degree)
-        self.intrestPoints.remove(origin)
+        if(origin in self.intrestPoints):
+            self.intrestPoints.remove(origin) 
         self.intrestPoints.append(origin) # i force the origin point to be the last index in interest zone
         #print(self.intrestPoints)
         for index in self.intrestPoints:

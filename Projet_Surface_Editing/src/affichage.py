@@ -65,7 +65,7 @@ def IdentityMat44():
 
 def affichage(myMesh, zone):
     pygame.init()
-    display = (800,600)
+    display = (1600,1000)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
     tx = 0
     ty = 0
@@ -80,7 +80,7 @@ def affichage(myMesh, zone):
     view_mat = IdentityMat44()
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    glTranslatef(0, 0, -5)
+    glTranslatef(0, 0, -10)
     glGetFloatv(GL_MODELVIEW_MATRIX, view_mat)
     glLoadIdentity()
 
@@ -122,9 +122,13 @@ def affichage(myMesh, zone):
         glLoadIdentity()
         glTranslatef(tx,ty,tz)
         if (rz!= 0):
+            glTranslatef(myMesh.points[0][0],myMesh.points[0][1],myMesh.points[0][2])
             glRotatef(rz*10, 0, 0, 1)
+            glTranslatef(-myMesh.points[0][0],-myMesh.points[0][1],-myMesh.points[0][2])
         elif (rx!= 0):
-            glRotatef(rx*10, 1, 0, 0)
+            glTranslatef(0, 0, -10)
+            glRotatef(rx*10, 1, 0, -10)
+            glTranslatef(0, 0, 10)
         #glRotatef(ry, 1, 0, 0)
         glMultMatrixf(view_mat)
 

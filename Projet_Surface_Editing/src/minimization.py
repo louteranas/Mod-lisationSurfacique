@@ -44,4 +44,5 @@ def minimizationError(monMesh, maZone, originPointIndex, nouveauPoint):
     mesLap = monMesh.computeLaplacianVertices()
     delta = [mesLap[i][j] for i in maZone.intrestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
     x0 = [monMesh.points[i][j] for i in maZone.intrestPoints for j in range(3)]
+    print(x0)
     return minimize(errorFonctional, x0, args=(delta, monMesh, maZone, originPointIndex, nouveauPoint),method='nelder-mead',options={'xtol': 1e-8, 'disp': True})
