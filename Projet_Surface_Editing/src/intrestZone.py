@@ -8,8 +8,10 @@ class IntrestZone:
     def __init__(self, mesh):
         self.originalMesh = mesh
         self.numberOfPoints = 0
-        self.intrestPoints = []
-        self.faces = []
+        self.intrestPoints = [] #list de points (copie des poins du mesh original)
+        #il me faudrait les indices des points (plus utile que ce qu'il y a au dessus):
+        self.indexPoints = []
+        self.faces = [] #indices des face sur le mesh original
 
     def computeDistance(self, originPoint, endPoint):
         return math.sqrt(pow(originPoint[0] - endPoint[0], 2) +\
@@ -20,6 +22,7 @@ class IntrestZone:
         for index, point in enumerate(self.originalMesh.points):
             if(self.computeDistance(origin, point) < distance):
                 self.intrestPoints.append(point)
+                self.indexPoints.append(index)
                 self.getFacesInInterestZone(index)
                 self.numberOfPoints += 1
         self.faces = list(set(self.faces))

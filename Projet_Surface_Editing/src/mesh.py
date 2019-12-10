@@ -81,7 +81,7 @@ class Mesh:
     def computeLaplacianMatrix(self):
         return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVerticesDegreeMatrix()), self.adjacentMatrix)
 
-    def computeLaplacienVertices(self, points):
+    def computeLaplacianVertices(self, points):
         vertexXT = np.transpose(np.asarray([vertex[0] for vertex in points]))
         vertexYT = np.transpose(np.asarray([vertex[1] for vertex in points]))
         vertexZT = np.transpose(np.asarray([vertex[2] for vertex in points]))
@@ -96,7 +96,7 @@ class Mesh:
             #     print('face: ')
             #     for vertex in face:
             #         print(vertex)
-        print(self.computeLaplacienVertices(self.points))
+        print(self.computeLaplacianVertices(self.points))
         #print(self.computeLaplacianMatrix())
         #print(self.computeVerticesDegreeMatrix())
         #print(self.adjacentMatrix)
