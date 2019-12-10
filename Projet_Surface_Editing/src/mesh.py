@@ -7,6 +7,7 @@ class Mesh:
         self.points = []
         self.facesIndexs = []
         self.adjacentMatrix = []
+        self.degreeMatrix = []
 
 
     def parseEntry(self, argFile = "../models/cylindre.off"):
@@ -30,6 +31,7 @@ class Mesh:
                     self.facesIndexs.append((int(ligneData[1]), int(ligneData[2]), int(ligneData[3])))
             self.adjacentMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
         self.computeAdjacentMatrix()
+        self.degreeMatrix = self.computeVerticesDegreeMatrix()
 
     def computeAdjacentMatrix(self):
         for faceIndexs in self.facesIndexs:
@@ -83,10 +85,10 @@ class Mesh:
     def computeLaplacianMatrix(self):
         return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVerticesDegreeMatrix()), self.adjacentMatrix)
 
-    def computeLaplacianVertices(self, points):
-        vertexXT = np.transpose(np.asarray([vertex[0] for vertex in points]))
-        vertexYT = np.transpose(np.asarray([vertex[1] for vertex in points]))
-        vertexZT = np.transpose(np.asarray([vertex[2] for vertex in points]))
+    def computeLaplacianVertices(self):
+        vertexXT = np.transpose(np.asarray([vertex[0] for vertex in self.points]))
+        vertexYT = np.transpose(np.asarray([vertex[1] for vertex in self.points]))
+        vertexZT = np.transpose(np.asarray([vertex[2] for vertex in self.points]))
         laplacienMatrix = self.computeLaplacianMatrix()
         laplacienverticesX = np.dot(laplacienMatrix, vertexXT)
         laplacienverticesY = np.dot(laplacienMatrix, vertexYT)
@@ -98,7 +100,7 @@ class Mesh:
             #     print('face: ')
             #     for vertex in face:
             #         print(vertex)
-        print(self.computeLaplacianVertices(self.points))
+        print(self.computeLaplacianVertices())
         #print(self.computeLaplacianMatrix())
         #print(self.computeVerticesDegreeMatrix())
         #print(self.adjacentMatrix)
