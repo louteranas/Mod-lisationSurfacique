@@ -14,13 +14,18 @@ def main():
     #myMesh.draw()
 
 
-
+    originIndex = 30
+    newPointPos = (0.1950900852680206, -1.600000023841858, 0.9807853102684021)
     zone = IntrestZone(myMesh)
      # zone.findPointsBydistance(myMesh.points[0], 1)
-    zone.findPointsByVoisins(30, 1)
+    zone.findPointsByVoisins(originIndex, 2)
     # zone.draw()
     #affichage(myMesh, zone)
-    res = minimizationError(myMesh, zone, 30, (10,10,8))
+    mesLap = myMesh.computeLaplacianVertices()
+    delta = [mesLap[i][j] for i in zone.intrestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
+    x0 = [myMesh.points[i][j] for i in zone.intrestPoints for j in range(3)]
+    errorFonctional(x0, delta, myMesh, zone, originIndex, newPointPos)
+    #res = minimizationError(myMesh, zone, 30, (10,10,8))
 
 
 main()

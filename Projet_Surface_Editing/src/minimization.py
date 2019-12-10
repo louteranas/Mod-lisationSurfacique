@@ -13,8 +13,8 @@ from scipy.optimize import minimize
 def normeCarreList(delta, laplacient):
     return sum([(delta[i] - laplacient[i])**2 for i in range(0, len(laplacient))])
 
-def normeCarrePoint(x, index, nouveauPoint):
-    return ((x[3*index][0]-nouveauPoint[0])**2 + (x[3*index][1]-nouveauPoint[1])**2 + (x[3*index][2]-nouveauPoint[2])**2)
+def normeCarrePoint(x, nouveauPoint):
+    return ((x[-3]-nouveauPoint[0])**2 + (x[-2]-nouveauPoint[1])**2 + (x[-1]-nouveauPoint[2])**2)
 
 
 #surement à mettre dans IntrestZone
@@ -24,15 +24,18 @@ def errorFonctional(x, delta, monMesh, maZone, originIndex, nouveauPoint):
     #le computeLaplacienVertices doit surement être modifié pour ne prendre qu'un point en entrée
     #numeroPoint
     laplacientCoords = computeLaplacient(x, monMesh, maZone)
-    return (normeCarreList(delta, laplacientCoords) + normeCarrePoint(x, originIndex, nouveauPoint))
+    # print(normeCarrePoint(x, nouveauPoint))
+    # print((normeCarreList(delta, laplacientCoords) + normeCarrePoint(x, nouveauPoint)))
+    return (normeCarreList(delta, laplacientCoords) + normeCarrePoint(x, nouveauPoint))
 
 def computeLaplacient(x, monMesh, maZone):
     laplacientCoords = [0 for _ in range(3*len(maZone.intrestPoints))]
     for i in range(0, 3*len(maZone.intrestPoints), 3):
-        index = maZone.intrestPoints[i//3]
-        laplacientCoords[i] = monMesh.points[index][0]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][0] for voisinIndex in monMesh.getFirstVoisins(index)]))
-        laplacientCoords[i+1] = monMesh.points[index][1]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][1] for voisinIndex in monMesh.getFirstVoisins(index)]))
-        laplacientCoords[i+2] = monMesh.points[index][2]-(1/monMesh.degreeMatrix[index])*(sum([monMesh.points[voisinIndex][2] for voisinIndex in monMesh.getFirstVoisins(index)]))
+        index = maZone.intrestPoints[i//3] # index iterates the indexes that define the interest zone
+        voisinsDeSomme = [monMesh.points[voisinIndex] for voisinIndex in monMesh.getFirstVoisins(index)]
+        laplacientCoords[i] = monMesh.points[index][0]-(1/monMesh.degreeMatrix[index][index])*(sum([point[0] for point in voisinsDeSomme]))
+        laplacientCoords[i+1] = monMesh.points[index][1]-(1/monMesh.degreeMatrix[index][index])*(sum([point[1] for point in voisinsDeSomme]))
+        laplacientCoords[i+2] = monMesh.points[index][2]-(1/monMesh.degreeMatrix[index][index])*(sum([point[2] for point in voisinsDeSomme]))
     return laplacientCoords
 
 
