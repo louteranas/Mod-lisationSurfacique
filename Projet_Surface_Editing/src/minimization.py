@@ -18,7 +18,7 @@ def normeCarrePoint(x, index, nouveauPoint):
 
 
 #surement à mettre dans IntrestZone
-def errorFonctional(delta, x, monMesh, maZone, originIndex, nouveauPoint):
+def errorFonctional(x, delta, monMesh, maZone, originIndex, nouveauPoint):
     #delta c'est les Laplacien des points de la zone d'interet de départ des vi
     #un le point qu'on veut bouger
     #le computeLaplacienVertices doit surement être modifié pour ne prendre qu'un point en entrée
@@ -36,8 +36,9 @@ def computeLaplacient(x, monMesh, maZone):
     return laplacientCoords
 
 
-def minimizationError(monMesh, maZone, numeroPoint, nouveauPoint):
+def minimizationError(monMesh, maZone, originPointIndex, nouveauPoint):
     #calcul de delta: point de la zone d'interet avant transformation en Laplacian
     mesLap = monMesh.computeLaplacianVertices()
     delta = [mesLap[i][j] for i in maZone.interestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
     x0 = [monMesh.points[i][j] for i in maZone.interestPoints for j in range(3)]
+    return minimize(errorFonctional, x0, args=(delta, monMesh, maZone, originPointIndex, nouveauPoint),method='nelder-mead',options={'xtol': 1e-8, 'disp': True})
