@@ -9,7 +9,7 @@ class Mesh:
         self.adjacentMatrix = []
 
 
-    def parseEntry(self, argFile = "../models/sphere.off"):
+    def parseEntry(self, argFile = "../models/cylindre.off"):
         with open(argFile, 'r') as argument:
             data = argument.read()
             lignes = data.split("\n")
@@ -49,6 +49,8 @@ class Mesh:
 
 
     def getDegreeVoisins(self, index, degree):
+        if(degree == 0):
+            return []
         firstVoisins = self.getFirstVoisins(index)
         voisins = [firstVoisins]
         for _ in range(degree-1):
