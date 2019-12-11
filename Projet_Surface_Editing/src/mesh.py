@@ -33,6 +33,35 @@ class Mesh:
         self.computeAdjacentMatrix()
         self.degreeMatrix = self.computeVerticesDegreeMatrix()
 
+
+    def saveMeshOff(self):
+        f = open('../models/result_test.off', 'w')
+        f.write('OFF')
+        f.write('\n')
+        f.write(str(self.numberOfPoints))
+        f.write(' ')
+        f.write(str(self.numberOfFaces))
+        f.write(' ')
+        f.write('0') #nb of edhe can be ignore
+        f.write('\n')
+        for point in self.points:
+            f.write(str(point[0]))
+            f.write(' ')
+            f.write(str(point[1]))
+            f.write(' ')
+            f.write(str(point[2]))
+            f.write('\n')
+        for face in self.facesIndexs:
+            f.write('3 ')
+            f.write(str(face[0]))
+            f.write(' ')
+            f.write(str(face[1]))
+            f.write(' ')
+            f.write(str(face[2]))
+            f.write('\n')
+        f.close()
+
+
     def computeAdjacentMatrix(self):
         for faceIndexs in self.facesIndexs:
             self.adjacentMatrix[faceIndexs[0]][faceIndexs[1]] = 1

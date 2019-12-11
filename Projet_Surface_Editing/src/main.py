@@ -14,12 +14,13 @@ def main():
     #myMesh.draw()
 
 
-    originIndex = 30
+    originIndex = 400
     # newPointPos = (0.1950900852680206, -1.600000023841858, 0.9807853102684021)
-    newPointPos = (0.1950900852680206, -1.900000023841858, 0.9807853102684021)
+
+    newPointPos = (myMesh.points[400][0]-0.5, myMesh.points[400][1]+0.1, myMesh.points[400][2])
     zone = IntrestZone(myMesh)
      # zone.findPointsBydistance(myMesh.points[0], 1)
-    zone.findPointsByVoisins(originIndex, 1)
+    zone.findPointsByVoisins(originIndex,1)
     # zone.draw()
     #print(myMesh.points[originIndex])
     #print(newPointPos)
@@ -27,14 +28,14 @@ def main():
     # delta = [mesLap[i][j] for i in zone.intrestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
     # x0 = [myMesh.points[i][j] for i in zone.intrestPoints for j in range(3)]
     # errorFonctional(x0, delta, myMesh, zone, originIndex, newPointPos)
-    
+
     res = minimizationError(myMesh, zone, 30, newPointPos)
-    
+
     for i in range(0, 3*len(zone.intrestPoints),3):
         myMesh.points[zone.intrestPoints[i//3]] = (res.x[i], res.x[i+1], res.x[i+2])
 
-    affichage(myMesh, zone)
+    #affichage(myMesh, zone)
     #print(res.x)
-
+    myMesh.saveMeshOff()
 
 main()

@@ -60,6 +60,7 @@ def object(myMesh, face, color):
 
 
 
+
 def IdentityMat44():
     return np.matrix(np.identity(4), copy=False, dtype='float32')
 
@@ -105,6 +106,8 @@ def affichage(myMesh, zone):
                 elif event.key == pygame.K_z:  rz = -1.0
                 elif event.key == pygame.K_s:    rx =  1.0
                 elif event.key == pygame.K_d:  rx = -1.0
+                elif event.key == pygame.K_x:    ry =  1.0
+                elif event.key == pygame.K_w:  ry = -1.0
             elif event.type == pygame.KEYUP:
                 if   event.key == pygame.K_RIGHT     and tx > 0: tx = 0
                 elif event.key == pygame.K_LEFT     and tx < 0: tx = 0
@@ -116,6 +119,8 @@ def affichage(myMesh, zone):
                 elif event.key == pygame.K_z  and rz < 0: rz = 0.0
                 elif event.key == pygame.K_s and rx > 0: rx = 0.0
                 elif event.key == pygame.K_d  and rx < 0: rx = 0.0
+                elif event.key == pygame.K_x and ry > 0: ry = 0.0
+                elif event.key == pygame.K_w  and ry < 0: ry = 0.0
 
 
         glPushMatrix()
@@ -129,6 +134,10 @@ def affichage(myMesh, zone):
             glTranslatef(0, 0, -10)
             glRotatef(rx*10, 1, 0, -10)
             glTranslatef(0, 0, 10)
+        elif (ry!= 0):
+
+            glRotatef(ry*10, 0, 1, 0)
+
         #glRotatef(ry, 1, 0, 0)
         glMultMatrixf(view_mat)
 
@@ -139,7 +148,7 @@ def affichage(myMesh, zone):
         color_red = (1.0, 0.0, 0.0)
         color_blue = (0.0, 0.0, 1.0)
         color_green = (0.0, 1.0, 0.0)
-        
+
         # for face in myMesh.facesIndexs:
         #    object(myMesh,face, color_white)
         for face in myMesh.facesIndexs:
@@ -147,6 +156,9 @@ def affichage(myMesh, zone):
         for face in zone.faces:
             object(myMesh,face, color_red)
         glPopMatrix()
+
+
+
 
         pygame.display.flip()
         pygame.time.wait(10)
