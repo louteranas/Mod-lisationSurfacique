@@ -5,12 +5,15 @@ from intrestZone import IntrestZone
 import sys
 from affichage import *
 from minimization import *
+import os
 
 
 
 def main():
     myMesh = Mesh()
+    
     myMesh.parseEntry(sys.argv[1]) if len(sys.argv) > 1 else myMesh.parseEntry()
+    baseMeshPath = sys.argv[1] if len(sys.argv) > 1 else "../models/cylindre.off"
     #myMesh.draw()
 
 
@@ -37,5 +40,7 @@ def main():
     #affichage(myMesh, zone)
     #print(res.x)
     myMesh.saveMeshOff()
+    os.system("meshlab " + baseMeshPath + " ../models/result_test.off &")
+    os.system("meshlab ../models/result_test.off &")
 
 main()
