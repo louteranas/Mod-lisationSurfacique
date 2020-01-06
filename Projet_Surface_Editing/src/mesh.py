@@ -35,7 +35,8 @@ class Mesh:
 
 
     def saveMeshOff(self):
-        f = open('../models/result_test.off', 'w')
+        print('mesh enregistré dans ../models/result_test_e3.off')
+        f = open('../models/result_test_e3.off', 'w')
         f.write('OFF')
         f.write('\n')
         f.write(str(self.numberOfPoints))
