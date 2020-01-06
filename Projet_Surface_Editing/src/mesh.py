@@ -120,9 +120,11 @@ class Mesh:
         vertexYT = np.transpose(np.asarray([vertex[1] for vertex in self.points]))
         vertexZT = np.transpose(np.asarray([vertex[2] for vertex in self.points]))
         laplacienMatrix = self.computeLaplacianMatrix()
-        laplacienverticesX = np.dot(laplacienMatrix, vertexXT)
-        laplacienverticesY = np.dot(laplacienMatrix, vertexYT)
-        laplacienverticesZ = np.dot(laplacienMatrix, vertexZT)
+        print("laplacian")
+        print([[laplacienMatrix[e][i]  for i in range(8)] for e in range(6)])
+        laplacienverticesX = laplacienMatrix.dot(vertexXT)
+        laplacienverticesY = laplacienMatrix.dot(vertexYT)
+        laplacienverticesZ = laplacienMatrix.dot(vertexZT)
         return [[laplacienverticesX[i], laplacienverticesY[i], laplacienverticesZ[i]] for i in range(self.numberOfPoints)]
 
     def draw(self):

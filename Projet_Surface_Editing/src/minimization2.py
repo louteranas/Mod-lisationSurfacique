@@ -15,6 +15,9 @@ def minimization2(monMesh, maZone, originPointIndex, nouveauPoint):
     bx.append(nouveauPoint[0])
     by.append(nouveauPoint[1])
     bz.append(nouveauPoint[2])
+    print("bx ",bx, "\n")
+    print("by ", by, "\n")
+    print("bz ", bz, "\n")
 
     #point de depart de la resolution de ax=b :inutil
     vx = [monMesh.points[i][0] for i in maZone.intrestPoints]
@@ -22,18 +25,19 @@ def minimization2(monMesh, maZone, originPointIndex, nouveauPoint):
     vz = [monMesh.points[i][2] for i in maZone.intrestPoints]
 
     # essaie 1
-    # xx = np.linalg.solve(matriceMin, A.transpose().dot(bx))
-    # xy = np.linalg.solve(matriceMin, A.transpose().dot(by))
-    # xz = np.linalg.solve(matriceMin, A.transpose().dot(bz))
+    xx = np.linalg.solve(matriceMin, (A.transpose()).dot(bx))
+    xy = np.linalg.solve(matriceMin, (A.transpose()).dot(by))
+    xz = np.linalg.solve(matriceMin, (A.transpose()).dot(bz))
 
     # essaie 2
-    # xx = np.linalg.inv(A).dot(bx)
-    # xy = np.linalg.inv(A).dot(by)
-    # xz = np.linalg.inv(A).dot(bz)
+    # xx = np.linalg.inv(matriceMin).dot(A.transpose().dot(bx))
+    # xy = np.linalg.inv(matriceMin).dot(A.transpose().dot(by))
+    # xz = np.linalg.inv(matriceMin).dot(A.transpose().dot(bz))
 
     # essaie 3
     #P, L, U = scipy.linalg.lu(A)
-    xx = scipy.linalg.solve(A, bx)
-    xy = scipy.linalg.solve(A, by)
-    xz = scipy.linalg.solve(A, bz)
+    # xx = scipy.linalg.solve(A, bx)
+    # xy = scipy.linalg.solve(A, by)
+    # xz = scipy.linalg.solve(A, bz)
+    #return [bx, by, bz]
     return [xx, xy, xz]

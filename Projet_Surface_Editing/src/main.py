@@ -3,7 +3,7 @@
 from mesh import Mesh
 from intrestZone import IntrestZone
 import sys
-#from affichage import *
+from affichage import *
 from minimization import *
 from minimization2 import *
 import os
@@ -18,13 +18,13 @@ def main():
     #myMesh.draw()
 
 
-    originIndex = 30
+    originIndex = 0
     # newPointPos = (0.1950900852680206, -1.600000023841858, 0.9807853102684021)
 
-    newPointPos = (myMesh.points[originIndex][0]+0.5, myMesh.points[originIndex][1]-0.1, myMesh.points[originIndex][2])
+    newPointPos = (myMesh.points[originIndex][0]-2, myMesh.points[originIndex][1], myMesh.points[originIndex][2])
     zone = IntrestZone(myMesh)
      # zone.findPointsBydistance(myMesh.points[0], 1)
-    zone.findPointsByVoisins(originIndex,4)
+    zone.findPointsByVoisins(originIndex,1)
     #zone.computeMatrixA()
 
     # zone.draw()
@@ -53,5 +53,6 @@ def main():
     for i in range(zone.numberOfPoints):
         myMesh.points[zone.intrestPoints[i]] = (res[0][i], res[1][i], res[2][i])
     myMesh.saveMeshOff()
+    affichage(myMesh, zone)
 
 main()

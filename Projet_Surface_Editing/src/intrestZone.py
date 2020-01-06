@@ -62,17 +62,27 @@ class IntrestZone:
         lastLigne.append(1)
         #print(lastLigne)
         matrix.append(lastLigne)
-        #print((matrix))
+        print("taille matrix ", len(matrix), len(matrix[0]))
+        print("matrix: ")
+        for e in matrix:
+            print( e, "\n")
+            print("sum", sum(e))
         return matrix
 
     #return delta x, y, z:le debut des vecteurs bx; by, bz defini dans le papier pour 1 SEUL point déplacé
     def delta(self):
         LaplacianVertices = self.originalMesh.computeLaplacianVertices()
 
+        box =[self.originalMesh.points[e][0] for e in self.intrestPoints[:-1]]
+        boy =[self.originalMesh.points[e][1] for e in self.intrestPoints[:-1]]
+        boz =[self.originalMesh.points[e][2] for e in self.intrestPoints[:-1]]
 
         bx = [LaplacianVertices[e][0] for e in self.intrestPoints[:-1]]
         by = [LaplacianVertices[e][1] for e in self.intrestPoints[:-1]]
         bz = [LaplacianVertices[e][2] for e in self.intrestPoints[:-1]]
+        # print("bx ", box, bx, "\n")
+        # print("by ", boy, by, "\n")
+        # print("bz ", boz, bz, "\n")
         return bx, by, bz
 
 
