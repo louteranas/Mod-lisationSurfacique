@@ -4,7 +4,7 @@ class Mesh:
     def __init__(self):
         self.numberOfPoints = 0
         self.numberOfFaces = 0
-        self.points = []
+        self.points = [] #liste des tuples de points du mesh
         self.facesIndexs = []
         self.adjacentMatrix = []
         self.degreeMatrix = []
@@ -35,8 +35,8 @@ class Mesh:
 
 
     def saveMeshOff(self):
-        print('mesh enregistré dans ../models/result_test_e3.off')
-        f = open('../models/result_test_e3.off', 'w')
+        print('mesh enregistré dans ../models/result_cylindre.off')
+        f = open('../models/result_test_cylindre.off', 'w')
         f.write('OFF')
         f.write('\n')
         f.write(str(self.numberOfPoints))
@@ -73,6 +73,7 @@ class Mesh:
             self.adjacentMatrix[faceIndexs[0]][faceIndexs[2]] = 1
 
     def getFirstVoisins(self, index):
+        #renvoie la liste des voisins du point d'index index (sans le point lui meme)
         voisins = []
         for i in range(self.numberOfPoints):
             if(self.adjacentMatrix[index][i] == 1):

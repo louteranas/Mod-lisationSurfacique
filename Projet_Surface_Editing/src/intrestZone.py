@@ -63,10 +63,8 @@ class IntrestZone:
         #print(lastLigne)
         matrix.append(lastLigne)
         print("taille matrix ", len(matrix), len(matrix[0]))
-        print("matrix: ")
-        for e in matrix:
-            print( e, "\n")
-            print("sum", sum(e))
+        print("matrix: ", matrix)
+
         return matrix
 
     #return delta x, y, z:le debut des vecteurs bx; by, bz defini dans le papier pour 1 SEUL point déplacé

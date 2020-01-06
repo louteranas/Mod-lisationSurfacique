@@ -2,6 +2,7 @@
 
 from mesh import Mesh
 from intrestZone import IntrestZone
+from amelioration import newB
 import sys
 from affichage import *
 import numpy as np
@@ -15,9 +16,9 @@ def minimization2(monMesh, maZone, originPointIndex, nouveauPoint):
     bx.append(nouveauPoint[0])
     by.append(nouveauPoint[1])
     bz.append(nouveauPoint[2])
-    print("bx ",bx, "\n")
-    print("by ", by, "\n")
-    print("bz ", bz, "\n")
+
+    #nouveaux b:
+    bx, by, bz = newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz)
 
     #point de depart de la resolution de ax=b :inutil
     vx = [monMesh.points[i][0] for i in maZone.intrestPoints]
