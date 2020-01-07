@@ -25,9 +25,14 @@ class Mesh:
                     firstLigne = False
                     continue
                 ligneData = ([f for f in ligne.split(" ")])
-                if(len(ligneData)==3):
+                if("" in ligneData):
+                    ligneData.remove("")
+                if(len(ligneData) == 3):
+                    # print("je parse les coordonnées")
                     self.points.append((float(ligneData[0]), float(ligneData[1]), float(ligneData[2])))
-                if(len(ligneData)==4):
+                # if("3" in ligneData):
+                if(len(ligneData) == 4):
+                    # print("je parse les faces")
                     self.facesIndexs.append((int(ligneData[1]), int(ligneData[2]), int(ligneData[3])))
             self.adjacentMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
         self.computeAdjacentMatrix()
@@ -35,8 +40,8 @@ class Mesh:
 
 
     def saveMeshOff(self):
-        print('mesh enregistré dans ../models/result_cylindre.off')
-        f = open('../models/result_test_cylindre.off', 'w')
+        print('mesh enregistré dans ../models/result_test.off')
+        f = open('../models/result_test.off', 'w')
         f.write('OFF')
         f.write('\n')
         f.write(str(self.numberOfPoints))
