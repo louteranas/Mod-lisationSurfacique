@@ -21,8 +21,9 @@ def main():
 
     originIndex = 100
     # newPointPos = (0.1950900852680206, -1.600000023841858, 0.9807853102684021)
-
+    sauvPoint = myMesh.points[originIndex]
     newPointPos = (myMesh.points[originIndex][0], myMesh.points[originIndex][1], myMesh.points[originIndex][2])
+    print("point d'origine", sauvPoint, "newPointPos", newPointPos)
     zone = IntrestZone(myMesh)
      # zone.findPointsBydistance(myMesh.points[0], 1)
     zone.findPointsByVoisins(originIndex,2)
@@ -55,7 +56,7 @@ def main():
          myMesh.points[zone.intrestPoints[i]] = (res[0][i], res[1][i], res[2][i])
     myMesh.saveMeshOff()
     # os.system("meshlab ../models/result_test.off &")
-    affichage(myMesh, zone)
+    affichage(myMesh, zone,  originIndex, newPointPos, sauvPoint)
 
 
 main()

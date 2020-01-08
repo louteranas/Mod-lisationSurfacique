@@ -16,7 +16,7 @@ def newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz):
         Ai = []
         bi = []
         #print("point ", point)
-        print(len([e for e in monMesh.getFirstVoisins(point)]), "voisins", [e for e in monMesh.getFirstVoisins(point)])
+        #print(len([e for e in monMesh.getFirstVoisins(point)]), "voisins", [e for e in monMesh.getFirstVoisins(point)])
         if point== originPointIndex:
             bi.append(nouveauPoint[0])
             bi.append(nouveauPoint[1])
@@ -59,7 +59,7 @@ def newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz):
         [-h[1], h[0], s, t[2]]
         ])
         newb = Ti.dot(np.array([bx[i], by[i], bz[i], 1]).transpose())
-        print("newb: ", newb)
+        #print("newb: ", newb)
         #remet sous forme classique
         #newb = [newb[0]/newb[3], newb[1]/newb[3], newb[2]/newb[3] ]
         #print("sihitiT: ", sihitiT[0], "taille", len(sihitiT[0]))

@@ -31,7 +31,7 @@ class IntrestZone:
         if(origin in self.intrestPoints):
             self.intrestPoints.remove(origin)
         self.intrestPoints.append(origin) # i force the origin point to be the last index in interest zone
-        print(self.intrestPoints)
+        #print(self.intrestPoints)
 
         for index in self.intrestPoints:
             self.getFacesInInterestZone(index)
@@ -62,8 +62,8 @@ class IntrestZone:
         lastLigne.append(1)
         #print(lastLigne)
         matrix.append(lastLigne)
-        print("taille matrix ", len(matrix), len(matrix[0]))
-        print("matrix: ", matrix)
+        #print("taille matrix ", len(matrix), len(matrix[0]))
+        #print("matrix: ", matrix)
 
         return matrix
 

@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+import pygame.gfxdraw
+import lspg
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -52,9 +54,20 @@ def Cube():
 def object(myMesh, face, color):
     glBegin(GL_LINES)
     face2 = face + (face[0],)
+    #print("face", face2)
     for vertex in face2:
         glColor3f(color[0], color[1], color[2]);
         glVertex3fv(myMesh.points[vertex])
+    glEnd()
+
+def afficahgePoint(listPointFace, color):
+    glBegin(GL_LINES)
+    face2 = [0, 1, 0, 2, 0, 3, 0, 4, 0]
+
+    #face2 = [0, 1, 0, 2, 0, 3, 0]
+    for p in face2[: len(listPointFace)+1]:
+        glColor3f(color[0], color[1], color[2]);
+        glVertex3fv(listPointFace[p])
     glEnd()
 
 
@@ -64,7 +77,7 @@ def object(myMesh, face, color):
 def IdentityMat44():
     return np.matrix(np.identity(4), copy=False, dtype='float32')
 
-def affichage(myMesh, zone):
+def affichage(myMesh, zone, originIndex, newPointPos, sauvPoint):
     pygame.init()
     display = (1600,1000)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
@@ -148,6 +161,7 @@ def affichage(myMesh, zone):
         color_red = (1.0, 0.0, 0.0)
         color_blue = (0.0, 0.0, 1.0)
         color_green = (0.0, 1.0, 0.0)
+        color_yellow = (1.0, 1.0, 0.0)
 
         # for face in myMesh.facesIndexs:
         #    object(myMesh,face, color_white)
@@ -155,6 +169,17 @@ def affichage(myMesh, zone):
             object(myMesh,face, color_white)
         for face in zone.faces:
             object(myMesh,face, color_red)
+        #affichage du point changé
+        visPoint= [myMesh.points[originIndex], (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1]+0.2,myMesh.points[originIndex][2]), (myMesh.points[originIndex][0]-0.2, myMesh.points[originIndex][1]-0.2,myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1],myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0], myMesh.points[originIndex][1],myMesh.points[originIndex][2]+0.2 )]
+        #affichage de l'ancien point
+        visPointSauv = [sauvPoint, (sauvPoint[0]+0.2, sauvPoint[1]+0.2,sauvPoint[2]), (sauvPoint[0]-0.2, sauvPoint[1]-0.2,sauvPoint[2]-0.2 ), (sauvPoint[0]+0.2, sauvPoint[1],sauvPoint[2]-0.2 ), (sauvPoint[0], sauvPoint[1],sauvPoint[2]+0.2 )]
+        #affichage du point voulu
+        visPointVoulu = [newPointPos, (newPointPos[0]+0.2, newPointPos[1]+0.2,newPointPos[2]), (newPointPos[0]-0.2, newPointPos[1]-0.2,newPointPos[2]-0.2 ), (newPointPos[0]+0.2, newPointPos[1],newPointPos[2]-0.2 ), (newPointPos[0], newPointPos[1],newPointPos[2]+0.2 )]
+
+
+        afficahgePoint(visPoint, color_blue)
+        afficahgePoint(visPointVoulu, color_yellow)
+        afficahgePoint(visPointSauv, color_green)
         glPopMatrix()
 
 
