@@ -55,7 +55,8 @@ class IntrestZone:
         #matrix = np.identity(self.numberOfPoints)
         matrix = []
         LaplaMatrix = self.originalMesh.computeLaplacianMatrix()
-        for point in self.intrestPoints[:-1]:
+        for point in self.intrestPoints:
+        #for point in self.intrestPoints[:-1]:
             #matrix[k] = [self.originalMesh.adjacentMatrix[point] for point in self.intrestPoints]
             matrix.append([LaplaMatrix[point][e] for e in self.intrestPoints])
         lastLigne =[0 for _ in range(self.numberOfPoints-1)]
@@ -75,12 +76,23 @@ class IntrestZone:
         boy =[self.originalMesh.points[e][1] for e in self.intrestPoints[:-1]]
         boz =[self.originalMesh.points[e][2] for e in self.intrestPoints[:-1]]
 
-        bx = [LaplacianVertices[e][0] for e in self.intrestPoints[:-1]]
-        by = [LaplacianVertices[e][1] for e in self.intrestPoints[:-1]]
-        bz = [LaplacianVertices[e][2] for e in self.intrestPoints[:-1]]
+        bx = [LaplacianVertices[e][0] for e in self.intrestPoints]
+        by = [LaplacianVertices[e][1] for e in self.intrestPoints]
+        bz = [LaplacianVertices[e][2] for e in self.intrestPoints]
         # print("bx ", box, bx, "\n")
         # print("by ", boy, by, "\n")
         # print("bz ", boz, bz, "\n")
+        return bx, by, bz
+
+    def delta2(self):
+        box =[self.originalMesh.points[e][0] for e in self.intrestPoints]
+        boy =[self.originalMesh.points[e][1] for e in self.intrestPoints]
+        boz =[self.originalMesh.points[e][2] for e in self.intrestPoints]
+        A = np.array(self.computeMatrixA())[:-1]
+        bx = list(A.dot(box))
+        by = list(A.dot(boy))
+        bz = list(A.dot(boz))
+
         return bx, by, bz
 
 

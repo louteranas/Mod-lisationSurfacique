@@ -62,14 +62,17 @@ def object(myMesh, face, color):
 
 def afficahgePoint(listPointFace, color):
     glBegin(GL_LINES)
-    face2 = [0, 1, 0, 2, 0, 3, 0, 4, 0]
+    face2 = [0, 1, 0, 2, 0, 3, 0, 4, 0, 1]
+
 
     #face2 = [0, 1, 0, 2, 0, 3, 0]
-    for p in face2[: len(listPointFace)+1]:
+    for p in face2[: len(listPointFace)]:
         glColor3f(color[0], color[1], color[2]);
         glVertex3fv(listPointFace[p])
     glEnd()
 
+def listePointProche(point):
+    return [point, (point[0]+0.2, point[1]+0.2,point[2]), (point[0]-0.2, point[1]-0.2,point[2]-0.2 ), (point[0]+0.2, point[1],point[2]-0.2 ), (point[0], point[1],point[2]+0.2 )]
 
 
 
@@ -170,18 +173,19 @@ def affichage(myMesh, zone, originIndex, newPointPos, sauvPoint):
         for face in zone.faces:
             object(myMesh,face, color_red)
         #affichage du point changé
-        visPoint= [myMesh.points[originIndex], (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1]+0.2,myMesh.points[originIndex][2]), (myMesh.points[originIndex][0]-0.2, myMesh.points[originIndex][1]-0.2,myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1],myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0], myMesh.points[originIndex][1],myMesh.points[originIndex][2]+0.2 )]
+        #visPoint= [myMesh.points[originIndex], (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1]+0.2,myMesh.points[originIndex][2]), (myMesh.points[originIndex][0]-0.2, myMesh.points[originIndex][1]-0.2,myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1],myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0], myMesh.points[originIndex][1],myMesh.points[originIndex][2]+0.2 )]
+        visPoint = listePointProche(myMesh.points[originIndex])
         #affichage de l'ancien point
-        visPointSauv = [sauvPoint, (sauvPoint[0]+0.2, sauvPoint[1]+0.2,sauvPoint[2]), (sauvPoint[0]-0.2, sauvPoint[1]-0.2,sauvPoint[2]-0.2 ), (sauvPoint[0]+0.2, sauvPoint[1],sauvPoint[2]-0.2 ), (sauvPoint[0], sauvPoint[1],sauvPoint[2]+0.2 )]
+        #visPointSauv = [sauvPoint, (sauvPoint[0]+0.2, sauvPoint[1]+0.2,sauvPoint[2]), (sauvPoint[0]-0.2, sauvPoint[1]-0.2,sauvPoint[2]-0.2 ), (sauvPoint[0]+0.2, sauvPoint[1],sauvPoint[2]-0.2 ), (sauvPoint[0], sauvPoint[1],sauvPoint[2]+0.2 )]
+        visPointSauv = listePointProche(sauvPoint)
         #affichage du point voulu
-        visPointVoulu = [newPointPos, (newPointPos[0]+0.2, newPointPos[1]+0.2,newPointPos[2]), (newPointPos[0]-0.2, newPointPos[1]-0.2,newPointPos[2]-0.2 ), (newPointPos[0]+0.2, newPointPos[1],newPointPos[2]-0.2 ), (newPointPos[0], newPointPos[1],newPointPos[2]+0.2 )]
-
+        #visPointVoulu = [newPointPos, (newPointPos[0]+0.2, newPointPos[1]+0.2,newPointPos[2]), (newPointPos[0]-0.2, newPointPos[1]-0.2,newPointPos[2]-0.2 ), (newPointPos[0]+0.2, newPointPos[1],newPointPos[2]-0.2 ), (newPointPos[0], newPointPos[1],newPointPos[2]+0.2 )]
+        visPointVoulu = listePointProche(newPointPos)
 
         afficahgePoint(visPoint, color_blue)
         afficahgePoint(visPointVoulu, color_yellow)
         afficahgePoint(visPointSauv, color_green)
         glPopMatrix()
-
 
 
 
