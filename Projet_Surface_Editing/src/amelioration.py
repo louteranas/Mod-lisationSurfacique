@@ -17,26 +17,18 @@ def newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz):
         bi = []
         #print("point ", point)
         #print(len([e for e in monMesh.getFirstVoisins(point)]), "voisins", [e for e in monMesh.getFirstVoisins(point)])
-        if point== originPointIndex:
-            bi.append(nouveauPoint[0])
-            bi.append(nouveauPoint[1])
-            bi.append(nouveauPoint[2])
-        else:
-            bi.append(monMesh.points[point][0])
-            bi.append(monMesh.points[point][1])
-            bi.append(monMesh.points[point][2])
+
+        bi.append(monMesh.points[point][0])
+        bi.append(monMesh.points[point][1])
+        bi.append(monMesh.points[point][2])
         Ai.append([monMesh.points[point][0], 0, monMesh.points[point][2], -monMesh.points[point][1], 1, 0, 0])
         Ai.append([monMesh.points[point][1], -monMesh.points[point][2], 0, monMesh.points[point][0], 0, 1, 0])
         Ai.append([monMesh.points[point][2], monMesh.points[point][1], -monMesh.points[point][0], 0, 0, 1, 0])
         for voisin in monMesh.getFirstVoisins(point):
-            if point== originPointIndex:
-                bi.append(nouveauPoint[0])
-                bi.append(nouveauPoint[1])
-                bi.append(nouveauPoint[2])
-            else:
-                bi.append(monMesh.points[voisin][0])
-                bi.append(monMesh.points[voisin][1])
-                bi.append(monMesh.points[voisin][2])
+
+            bi.append(monMesh.points[voisin][0])
+            bi.append(monMesh.points[voisin][1])
+            bi.append(monMesh.points[voisin][2])
             Ai.append([monMesh.points[voisin][0], 0, monMesh.points[voisin][2], -monMesh.points[voisin][1], 1, 0, 0])
             Ai.append([monMesh.points[voisin][1], -monMesh.points[voisin][2], 0, monMesh.points[voisin][0], 0, 1, 0])
             Ai.append([monMesh.points[voisin][2], monMesh.points[voisin][1], -monMesh.points[voisin][0], 0, 0, 1, 0])

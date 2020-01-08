@@ -18,11 +18,12 @@ def minimization2(monMesh, maZone, originPointIndex, nouveauPoint):
     by.append(nouveauPoint[1])
     bz.append(nouveauPoint[2])
 
+
     #nouveaux b:
-    # bx, by, bz = newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz)
-    # bx.append(nouveauPoint[0])
-    # by.append(nouveauPoint[1])
-    # bz.append(nouveauPoint[2])
+    bx, by, bz = newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz)
+    bx.append(nouveauPoint[0])
+    by.append(nouveauPoint[1])
+    bz.append(nouveauPoint[2])
     #point de depart de la resolution de ax=b :inutil
     vx = [monMesh.points[i][0] for i in maZone.intrestPoints]
     vy = [monMesh.points[i][1] for i in maZone.intrestPoints]
