@@ -11,6 +11,7 @@ class IntrestZone:
         self.numberOfPoints = 0
         self.intrestPoints = [] #list d'indice points (copie des poins du mesh original)
         self.faces = [] #indices des face sur le mesh original
+        self.dictFaces = {}
 
     def computeDistance(self, originPoint, endPoint):
         return math.sqrt(pow(originPoint[0] - endPoint[0], 2) +\
@@ -94,6 +95,33 @@ class IntrestZone:
         bz = list(A.dot(boz))
 
         return bx, by, bz
+    
+    def getPositions(self):
+        output = []
+        compteur = 0
+        # print("poistions indexs = " + str(self.intrestPoints))
+        for vertexIndex in self.intrestPoints:
+            self.dictFaces[vertexIndex] = compteur
+            for coord in self.originalMesh.points[vertexIndex]:    
+                output.append(float(coord))
+            compteur += 1
+        # print(self.dictFaces)
+        return tuple(output)
+    
+    def getFaces(self):
+        output = []
+        for face in self.faces:
+            goodFace =True
+            for index in face:
+                if(index not in self.intrestPoints):
+                    goodFace = False
+            if(goodFace):
+                for index in face:    
+                    output.append(self.dictFaces[index])
+        # for i in range(len(output)):
+        #     output[i] =
+        # print("faces = " + str(output))
+        return output
 
 
 
