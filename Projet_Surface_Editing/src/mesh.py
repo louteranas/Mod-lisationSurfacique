@@ -133,6 +133,19 @@ class Mesh:
         laplacienverticesZ = laplacienMatrix.dot(vertexZT)
         return [[laplacienverticesX[i], laplacienverticesY[i], laplacienverticesZ[i]] for i in range(self.numberOfPoints)]
 
+    def arrayPoints(self):
+        array = []
+        for point in self.points:
+            for coord in point:
+                array.append(coord)
+        return tuple(array)
+    
+    def arrayFaces(self):
+        array = []
+        for face in self.facesIndexs:
+            for index in face:
+                array.append(index)
+        return array
     def draw(self):
             # for face in self.facesIndexs:
             #     print('face: ')
