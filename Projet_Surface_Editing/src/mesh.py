@@ -11,6 +11,7 @@ class Mesh:
 
 
     def parseEntry(self, argFile = "../models/cylindre.off"):
+        "parse et creer nos variables "
         with open(argFile, 'r') as argument:
             data = argument.read()
             lignes = data.split("\n")
@@ -40,6 +41,7 @@ class Mesh:
 
 
     def saveMeshOff(self):
+        "enregitre le mesh obtenue dans un .off"
         print('mesh enregistré dans ../models/result_test.off')
         f = open('../models/result_test.off', 'w')
         f.write('OFF')
@@ -69,6 +71,7 @@ class Mesh:
 
 
     def computeAdjacentMatrix(self):
+        "creer la matrice d'adjacence pour le mesh entier"
         for faceIndexs in self.facesIndexs:
             self.adjacentMatrix[faceIndexs[0]][faceIndexs[1]] = 1
             self.adjacentMatrix[faceIndexs[1]][faceIndexs[0]] = 1
@@ -78,12 +81,22 @@ class Mesh:
             self.adjacentMatrix[faceIndexs[0]][faceIndexs[2]] = 1
 
     def getFirstVoisins(self, index):
-        #renvoie la liste des voisins du point d'index index (sans le point lui meme)
+        "renvoie la liste des voisins du point d'index index (sans le point lui meme)"
         voisins = []
         for i in range(self.numberOfPoints):
             if(self.adjacentMatrix[index][i] == 1):
                 voisins.append(i)
         return voisins
+
+    def getCoordonneesListePoints(self, listeIndexPoints):
+        "renvoie les coordonnees d'une liste de points (dans une liste)"
+        return [self.points[i] for i in listeIndexPoints]
+
+    def createHandle(self,listePointsHandle, newPointPos):
+        newListePointsHandle = []
+        for point in listePointsHandle:
+            newListePointsHandle.append(tuple(map(lambda i, j: i*0.9 + j*0.1, newPointPos, point)))
+        return newListePointsHandle
 
 
     def getDegreeVoisins(self, index, degree):
@@ -100,15 +113,21 @@ class Mesh:
         return voisins
 
     def getAllVoisins(self, index, degree):
+        "renvoie le voisinage du point d'indice index, degree étant la distance maximal des voisins"
         degreeVoisins = self.getDegreeVoisins(index, degree)
         allVoisins = []
         for voisins in degreeVoisins:
             for voisin in voisins:
                 allVoisins.append(voisin)
         allVoisins = list(set(allVoisins))
+        #on met le point en question à la fin
+        allVoisins.remove(index)
+        allVoisins.append(index)
+
         return allVoisins
 
     def verticesDegree(self):
+        "retourne la diagonale de la matrice D"
         return [sum(self.adjacentMatrix[i]) for i in range(self.numberOfPoints)]
 
     def computeVerticesDegreeMatrix(self):
@@ -139,7 +158,7 @@ class Mesh:
             for coord in point:
                 array.append(coord)
         return tuple(array)
-    
+
     def arrayFaces(self):
         array = []
         for face in self.facesIndexs:

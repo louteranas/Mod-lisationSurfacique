@@ -13,53 +13,40 @@ import os
 
 
 def main():
+    #creation de notre class mesh
     myMesh = Mesh()
 
+    #parsage du .off placé en argument
     myMesh.parseEntry(sys.argv[1]) if len(sys.argv) > 1 else myMesh.parseEntry()
     baseMeshPath = sys.argv[1] if len(sys.argv) > 1 else "../models/cylindre.off"
-    #myMesh.draw()
 
-
+    #choix du point centrale du Handle
     originIndex = 400
-        # newPointPos = (0.1950900852680206, -1.600000023841858, 0.9807853102684021)
     sauvPoint = myMesh.points[originIndex]
     newPointPos = (myMesh.points[originIndex][0]+0.5, myMesh.points[originIndex][1]+1, myMesh.points[originIndex][2])
-    print("point d'origine", sauvPoint, "newPointPos", newPointPos)
+
+    #creation du Handle
+    tailleHandle = 2
+    listePointsHandle = myMesh.getAllVoisins(originIndex, tailleHandle)
+    sauvListePointsHandle = myMesh.getCoordonneesListePoints(listePointsHandle)
+    newListePointsHandle = myMesh.createHandle(sauvListePointsHandle, newPointPos)
+
+    #print("point d'origine", sauvPoint, "newPointPos", newPointPos)
+
+    #Creation de la ROI
+    tailleROI= 5
     zone = IntrestZone(myMesh)
-     # zone.findPointsBydistance(myMesh.points[0], 1)
-    zone.findPointsByVoisins(originIndex,2)
-    #zone.computeMatrixA()
+    zone.findPointsByVoisins(originIndex,tailleROI)
 
-    # zone.draw()
-    #print(myMesh.points[originIndex])
-    #print(newPointPos)
-    # mesLap = myMesh.computeLaplacianVertices()
-    # delta = [mesLap[i][j] for i in zone.intrestPoints for j in range(3)] #on recupere que les lap de la zone d'interet comme x, y, z
-    # x0 = [myMesh.points[i][j] for i in zone.intrestPoints for j in range(3)]
-    # errorFonctional(x0, delta, myMesh, zone, originIndex, newPointPos)
-
-    #ancien
-    #res = minimizationError(myMesh, zone, originIndex, newPointPos)
-    #for i in range(0, 3*len(zone.intrestPoints),3):
-    #    myMesh.points[zone.intrestPoints[i//3]] = (res.x[i], res.x[i+1], res.x[i+2])
-    #fin ancien
-
-    #affichage(myMesh, zone)
-    #print(res.x)
-
-    #myMesh.saveMeshOff()
-    #os.system("meshlab " + baseMeshPath + " ../models/result_test.off &")
-    #os.system("meshlab ../models/result_test.off &")
-
-    #new
-    res = minimization2(myMesh, zone, originIndex, newPointPos)
+    #lancement de la minimisation
+    res = minimization2(myMesh, zone, originIndex, newPointPos, False)
     for i in range(zone.numberOfPoints):
          myMesh.points[zone.intrestPoints[i]] = (res[0][i], res[1][i], res[2][i])
     myMesh.saveMeshOff()
-    # os.system("meshlab ../models/result_test.off &")
-    print("\n point d'origine: ", sauvPoint)
-    print("\n point voulu: ", newPointPos)
-    print("\n point obtenu: ", myMesh.points[originIndex])
+
+    #print("\n point d'origine: ", sauvPoint)
+    #print("\n point voulu: ", newPointPos)
+    #print("\n point obtenu: ", myMesh.points[originIndex])
     affichage(myMesh, zone,  originIndex, newPointPos, sauvPoint)
 
 
