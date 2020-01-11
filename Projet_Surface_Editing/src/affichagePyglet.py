@@ -9,7 +9,6 @@ from intrestZone import IntrestZone
 import copy 
 
 from minimization import *
-from minimization2 import *
 
 ###### Mesh definitin
 originalMesh = Mesh()

@@ -6,7 +6,6 @@ import sys
 from affichage import *
 
 from minimization import *
-from minimization2 import *
 
 import os
 

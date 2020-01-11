@@ -1,7 +1,7 @@
 from mesh import Mesh
 from intrestZone import IntrestZone
 import sys
-from affichage import *
+from affichagePoor import *
 import numpy as np
 from numpy.linalg import inv
 
