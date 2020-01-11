@@ -70,6 +70,8 @@ class Mesh:
         f.close()
 
 
+#Calcul des matrices A, D et L
+
     def computeAdjacentMatrix(self):
         "creer la matrice d'adjacence pour le mesh entier"
         for faceIndexs in self.facesIndexs:
@@ -79,6 +81,25 @@ class Mesh:
             self.adjacentMatrix[faceIndexs[2]][faceIndexs[1]] = 1
             self.adjacentMatrix[faceIndexs[2]][faceIndexs[0]] = 1
             self.adjacentMatrix[faceIndexs[0]][faceIndexs[2]] = 1
+
+    def verticesDegree(self):
+        "retourne la diagonale de la matrice D"
+        return [sum(self.adjacentMatrix[i]) for i in range(self.numberOfPoints)]
+
+    def computeVerticesDegreeMatrix(self):
+        "renvoie la matrice D"
+        verticesDegree = self.verticesDegree()
+        verticesDegreeMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
+        for i in range(self.numberOfPoints):
+            verticesDegreeMatrix[i][i] = verticesDegree[i]
+        return verticesDegreeMatrix
+
+    def computeLaplacianMatrix(self):
+        "renvoie la matrice L"
+        return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVerticesDegreeMatrix()), self.adjacentMatrix)
+
+
+#fonctions de recherche de voisins, récupération de points ...
 
     def getFirstVoisins(self, index):
         "renvoie la liste des voisins du point d'index index (sans le point lui meme)"
@@ -92,15 +113,9 @@ class Mesh:
         "renvoie les coordonnees d'une liste de points (dans une liste)"
         return [self.points[i] for i in listeIndexPoints]
 
-    def createHandle(self,listePointsHandle, newPointPos):
-        "renvoie des nouvelles coordonnées auto"
-        newListePointsHandle = []
-        for point in listePointsHandle:
-            newListePointsHandle.append(tuple(map(lambda i, j: i*0.9 + j*0.1, newPointPos, point)))
-        return newListePointsHandle
-
 
     def getDegreeVoisins(self, index, degree):
+        "renvoie la liste des voisins à une distance degree du point d'indice index"
         if(degree == 0):
             return []
         firstVoisins = self.getFirstVoisins(index)
@@ -125,34 +140,20 @@ class Mesh:
         if (index in allVoisins):
             allVoisins.remove(index)
         allVoisins.append(index)
-
         return allVoisins
 
-    def verticesDegree(self):
-        "retourne la diagonale de la matrice D"
-        return [sum(self.adjacentMatrix[i]) for i in range(self.numberOfPoints)]
 
-    def computeVerticesDegreeMatrix(self):
-        verticesDegree = self.verticesDegree()
-        verticesDegreeMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
-        for i in range(self.numberOfPoints):
-            verticesDegreeMatrix[i][i] = verticesDegree[i]
-        return verticesDegreeMatrix
+#Pour la création du Handle
 
-    def computeLaplacianMatrix(self):
-        return np.identity(self.numberOfPoints) - np.dot(np.linalg.inv(self.computeVerticesDegreeMatrix()), self.adjacentMatrix)
+    def createHandle(self,listePointsHandle, newPointPos):
+        "renvoie des nouvelles coordonnées automatique pour le Handle"
+        newListePointsHandle = []
+        for point in listePointsHandle:
+            newListePointsHandle.append(tuple(map(lambda i, j: i*0.9 + j*0.1, newPointPos, point)))
+        return newListePointsHandle
 
-    def computeLaplacianVertices(self):
-        vertexXT = np.transpose(np.asarray([vertex[0] for vertex in self.points]))
-        vertexYT = np.transpose(np.asarray([vertex[1] for vertex in self.points]))
-        vertexZT = np.transpose(np.asarray([vertex[2] for vertex in self.points]))
-        laplacienMatrix = self.computeLaplacianMatrix()
-        #print("laplacian")
-        #print([[laplacienMatrix[e][i]  for i in range(8)] for e in range(6)])
-        laplacienverticesX = laplacienMatrix.dot(vertexXT)
-        laplacienverticesY = laplacienMatrix.dot(vertexYT)
-        laplacienverticesZ = laplacienMatrix.dot(vertexZT)
-        return [[laplacienverticesX[i], laplacienverticesY[i], laplacienverticesZ[i]] for i in range(self.numberOfPoints)]
+
+#pour l'affichage
 
     def arrayPoints(self):
         array = []
@@ -167,12 +168,3 @@ class Mesh:
             for index in face:
                 array.append(index)
         return array
-    def draw(self):
-            # for face in self.facesIndexs:
-            #     print('face: ')
-            #     for vertex in face:
-            #         print(vertex)
-        print(self.computeLaplacianVertices())
-        #print(self.computeLaplacianMatrix())
-        #print(self.computeVerticesDegreeMatrix())
-        #print(self.adjacentMatrix)
