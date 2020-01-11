@@ -22,6 +22,7 @@ originIndex = 400
 
 
 ##### Interest Zone
+originalZone = IntrestZone(originalMesh)
 zone = IntrestZone(myMesh)
 zoneSize = 0
 zone.findPointsByVoisins(originIndex, zoneSize)
@@ -32,7 +33,7 @@ def modifyMesh(myMesh, coordx, coordy):
     global zone
     sauvPoint = myMesh.points[originIndex]
     #newPointPos = (myMesh.points[originIndex][0]+0.5, myMesh.points[originIndex][1]+1, myMesh.points[originIndex][2])
-    newPointPos = (coordx, coordy, myMesh.points[originIndex][2])
+    newPointPos = (myMesh.points[originIndex][0]+coordx, myMesh.points[originIndex][1]+ coordy, myMesh.points[originIndex][2])
     res = minimization2(myMesh, zone, originIndex, newPointPos)
     for i in range(zone.numberOfPoints):
          myMesh.points[zone.intrestPoints[i]] = (res[0][i], res[1][i], res[2][i])
@@ -59,13 +60,13 @@ def on_show():
     pyglet.gl.glLoadIdentity()
     pyglet.gl.glTranslatef(0, 0, -6)
     pyglet.gl.glColor4f(1.0,1.,1.0,0.2)
-    mesh = pyglet.graphics.draw_indexed(len(myMesh.points), pyglet.gl.GL_TRIANGLES, myMesh.arrayFaces(), ('v3f', myMesh.arrayPoints()))
+    pyglet.graphics.draw_indexed(len(myMesh.points), pyglet.gl.GL_TRIANGLES, myMesh.arrayFaces(), ('v3f', myMesh.arrayPoints()))
 
 @cubeWindow.event
 def on_draw():
     global modified
     global zone
-    mesh = pyglet.graphics.draw_indexed(len(myMesh.points), pyglet.gl.GL_TRIANGLES, myMesh.arrayFaces(), ('v3f', myMesh.arrayPoints()), ('c3B', tuple([255,255,255]*len(myMesh.points))))
+    pyglet.graphics.draw_indexed(len(myMesh.points), pyglet.gl.GL_TRIANGLES, myMesh.arrayFaces(), ('v3f', myMesh.arrayPoints()), ('c3B', tuple([255,255,255]*len(myMesh.points))))
     if(zoneSize > 0):
         showInterestZone()
         
@@ -111,11 +112,7 @@ def on_mouse_drag(x, y, dx, dy, button, modifiers):
 
 def mouse_to_3d(x, y, z = 1.0, local_transform = False):
     x = float(x)
-    y = 1200 - float(y)
-    # The following could work if we were not initially scaling to zoom on
-    # the bed
-    # if self.orthographic:
-    #    return (x - self.width / 2, y - self.height / 2, 0)
+    y = float(y)
     pmat = (GLdouble * 16)()
     mvmat = (GLdouble * 16)()
     viewport = (GLint * 4)()
@@ -139,31 +136,37 @@ def on_mouse_press(x, y, button, modifiers):
     if(modifiers == pyglet.window.key.MOD_CTRL):
         sphere = gluNewQuadric()
         gluSphere(sphere,0.01,10,10)
-        worldCoords= mouse_to_3d(x/1200, y/1200)
-        modifyMesh(myMesh, worldCoords[0]/60, worldCoords[1]/60)
+        worldCoords= mouse_to_3d(x, y)
+        print(worldCoords)
+        modifyMesh(myMesh, worldCoords[0]/50, worldCoords[1]/50)
 
 
 @cubeWindow.event
 def on_key_press(symbol, modifiers):
+    global zone
     global zoneSize
+    global originalZone
     global myMesh
     global originalMesh
+    global originIndex
     cubeWindow.clear()
     if(symbol == pyglet.window.key.A):
         pyglet.gl.glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
     if(symbol == pyglet.window.key.Q):
         pyglet.gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     if(symbol == pyglet.window.key.UP):
+        cubeWindow.clear()
         zoneSize += 1
     if(symbol == pyglet.window.key.DOWN):
         zoneSize -= 1
-    if(symbol == pyglet.window.key.R):
-        myMesh = copy.deepcopy(originalMesh)
-        zone = IntrestZone(myMesh)
-        zoneSize = 0
+    if(symbol == pyglet.window.key.RIGHT):
+        originIndex += 1    
+        zone.reset()
         zone.findPointsByVoisins(originIndex, zoneSize)
-    # if(symbol == pyglet.window.key.Z):
-    #     return
+    if(symbol == pyglet.window.key.LEFT):
+        originIndex -= 1
+        zone.reset()
+        zone.findPointsByVoisins(originIndex, zoneSize)
 
 
 
