@@ -20,7 +20,7 @@ def minimizationHandle(monMesh, maZone, originPointIndex, newListePointsHandle, 
     matriceMin = A.transpose().dot(A) #AtA
 
     #creation du vecteur b de la minimisation
-    bx, by, bz = maZone.delta2()
+    bx, by, bz = maZone.delta()
     #si demandé calcul b avec l'amélioration des Ti
     if boolTi == True:
         bx, by, bz = newB(monMesh, maZone, originPointIndex, newListePointsHandle[-1], bx, by, bz)
@@ -29,8 +29,6 @@ def minimizationHandle(monMesh, maZone, originPointIndex, newListePointsHandle, 
         bx.append(point[0])
         by.append(point[1])
         bz.append(point[2])
-
-
 
     #choix du solveur
     if typeSolveur == True:
