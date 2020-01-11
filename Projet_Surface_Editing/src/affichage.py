@@ -10,47 +10,10 @@ from itertools import *
 from intrestZone import *
 
 
-#-------------------------Exemple pour un cube-----------------------------------------
-verticies = (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1)
-    )
-
-edges = (
-    (0,1),
-    (0,3),
-    (0,4),
-    (2,1),
-    (2,3),
-    (2,7),
-    (6,3),
-    (6,4),
-    (6,7),
-    (5,1),
-    (5,4),
-    (5,7)
-    )
 
 
-
-def Cube():
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(verticies[vertex])
-    glEnd()
-#--------------------Fin d'exemple pour le cube----------------------------------------------------
-
-
-
-#genere dans openGL un les edges de la face(liste de trois numero de vertex) du mesh en question avec la couleur choisie
 def object(myMesh, face, color):
+    "genere dans openGL un les edges de la face(liste de trois numero de vertex) du mesh en question avec la couleur choisie"
     glBegin(GL_LINES)
     face2 = face + (face[0],)
     #print("face", face2)
@@ -60,17 +23,16 @@ def object(myMesh, face, color):
     glEnd()
 
 def afficahgePoint(listPointFace, color):
+    "tente d'afficher/visualiser un points avec pygame"
     glBegin(GL_LINES)
     face2 = [0, 1, 0, 2, 0, 3, 0, 4, 0, 1]
-
-
-    #face2 = [0, 1, 0, 2, 0, 3, 0]
     for p in face2[: len(listPointFace)]:
         glColor3f(color[0], color[1], color[2]);
         glVertex3fv(listPointFace[p])
     glEnd()
 
 def listePointProche(point):
+    "renvoie une liste pour afficher les point"
     return [point, (point[0]+0.2, point[1]+0.2,point[2]), (point[0]-0.2, point[1]-0.2,point[2]-0.2 ), (point[0]+0.2, point[1],point[2]-0.2 ), (point[0], point[1],point[2]+0.2 )]
 
 
@@ -80,6 +42,7 @@ def IdentityMat44():
     return np.matrix(np.identity(4), copy=False, dtype='float32')
 
 def affichage(myMesh, zone, originIndex, newPointPos, sauvPoint):
+    "fonction d'affichage"
     pygame.init()
     display = (1600,1000)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
@@ -153,11 +116,8 @@ def affichage(myMesh, zone, originIndex, newPointPos, sauvPoint):
 
             glRotatef(ry*10, 0, 1, 0)
 
-        #glRotatef(ry, 1, 0, 0)
         glMultMatrixf(view_mat)
-
         glGetFloatv(GL_MODELVIEW_MATRIX, view_mat)
-
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         color_white = (1.0, 1.0, 1.0)
         color_red = (1.0, 0.0, 0.0)
@@ -165,62 +125,18 @@ def affichage(myMesh, zone, originIndex, newPointPos, sauvPoint):
         color_green = (0.0, 1.0, 0.0)
         color_yellow = (1.0, 1.0, 0.0)
 
-        # for face in myMesh.facesIndexs:
-        #    object(myMesh,face, color_white)
         for face in myMesh.facesIndexs:
             object(myMesh,face, color_white)
         for face in zone.faces:
             object(myMesh,face, color_red)
-        #affichage du point changé
-        #visPoint= [myMesh.points[originIndex], (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1]+0.2,myMesh.points[originIndex][2]), (myMesh.points[originIndex][0]-0.2, myMesh.points[originIndex][1]-0.2,myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0]+0.2, myMesh.points[originIndex][1],myMesh.points[originIndex][2]-0.2 ), (myMesh.points[originIndex][0], myMesh.points[originIndex][1],myMesh.points[originIndex][2]+0.2 )]
+
         visPoint = listePointProche(myMesh.points[originIndex])
-        #affichage de l'ancien point
-        #visPointSauv = [sauvPoint, (sauvPoint[0]+0.2, sauvPoint[1]+0.2,sauvPoint[2]), (sauvPoint[0]-0.2, sauvPoint[1]-0.2,sauvPoint[2]-0.2 ), (sauvPoint[0]+0.2, sauvPoint[1],sauvPoint[2]-0.2 ), (sauvPoint[0], sauvPoint[1],sauvPoint[2]+0.2 )]
         visPointSauv = listePointProche(sauvPoint)
-        #affichage du point voulu
-        #visPointVoulu = [newPointPos, (newPointPos[0]+0.2, newPointPos[1]+0.2,newPointPos[2]), (newPointPos[0]-0.2, newPointPos[1]-0.2,newPointPos[2]-0.2 ), (newPointPos[0]+0.2, newPointPos[1],newPointPos[2]-0.2 ), (newPointPos[0], newPointPos[1],newPointPos[2]+0.2 )]
         visPointVoulu = listePointProche(newPointPos)
 
         afficahgePoint(visPoint, color_blue)
         afficahgePoint(visPointVoulu, color_yellow)
         afficahgePoint(visPointSauv, color_green)
         glPopMatrix()
-
-
-
         pygame.display.flip()
         pygame.time.wait(10)
-
-
-
-
-    #
-    # pygame.init()
-    # display = (800,600)
-    # pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
-    #
-    # gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-    #
-    # glTranslatef(0.0,0.0, -5)
-    #
-    # while True:
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #             quit()
-    #
-    #     #glRotatef(1, 3, 1, 1)
-    #     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    #     #Cube()  #exemple simple d'un cube
-    #     color_red = (1.0, 0.0, 0.0)
-    #     color_white = (1.0, 1.0, 1.0)
-    #     color_blue = (0.0, 0.0, 1.0)
-    #     color_green = (0.0, 1.0, 0.0)
-    #     zone = IntrestZone(myMesh)
-    #     zone.findPointsBydistance(myMesh.points[50], 0.5)
-    #     for face in myMesh.facesIndexs:
-    #         object(myMesh,face, color_white)
-    #     for face in zone.faces:
-    #         object(myMesh,face, color_red)
-    #     pygame.display.flip()
-    #     pygame.time.wait(10)

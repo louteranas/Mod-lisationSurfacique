@@ -29,11 +29,8 @@ class Mesh:
                 if("" in ligneData):
                     ligneData.remove("")
                 if(len(ligneData) == 3):
-                    # print("je parse les coordonnées")
                     self.points.append((float(ligneData[0]), float(ligneData[1]), float(ligneData[2])))
-                # if("3" in ligneData):
                 if(len(ligneData) == 4):
-                    # print("je parse les faces")
                     self.facesIndexs.append((int(ligneData[1]), int(ligneData[2]), int(ligneData[3])))
             self.adjacentMatrix = np.asarray([np.asarray([0 for _ in range(self.numberOfPoints)]) for _ in range(self.numberOfPoints)])
         self.computeAdjacentMatrix()
@@ -50,7 +47,7 @@ class Mesh:
         f.write(' ')
         f.write(str(self.numberOfFaces))
         f.write(' ')
-        f.write('0') #nb of edhe can be ignore
+        f.write('0') #nb of edge can be ignore
         f.write('\n')
         for point in self.points:
             f.write(str(point[0]))

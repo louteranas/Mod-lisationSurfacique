@@ -13,18 +13,22 @@ class IntrestZone:
         self.faces = [] #indices des face sur le mesh original
         self.dictFaces = {}
 
-    def computeDistance(self, originPoint, endPoint):
-        return math.sqrt(pow(originPoint[0] - endPoint[0], 2) +\
-                         pow(originPoint[1] - endPoint[1], 2) +\
-                         pow(originPoint[2] - endPoint[2], 2))
-
     def reset(self):
         self.numberOfPoints = 0
         self.intrestPoints = [] #list d'indice points (copie des poins du mesh original)
         self.faces = [] #indices des face sur le mesh original
         self.dictFaces = {}
-    
+
+#Fonctions utiles pour la création de la ROI par distance et non par voisinnage
+
+    def computeDistance(self, originPoint, endPoint):
+        "renvoie la distance entre 2 points en donnant leur indice"
+        return math.sqrt(pow(originPoint[0] - endPoint[0], 2) +\
+                         pow(originPoint[1] - endPoint[1], 2) +\
+                         pow(originPoint[2] - endPoint[2], 2))
+
     def findPointsBydistance(self, origin, distance):
+        "creer la ROI par distance"
         for index, point in enumerate(self.originalMesh.points):
             if(self.computeDistance(origin, point) < distance):
                 self.intrestPoints.append(point)
@@ -32,14 +36,14 @@ class IntrestZone:
                 self.numberOfPoints += 1
         self.faces = list(set(self.faces))
 
-    #creer la zone d'interet autour de l'origine avec distande degree
+#Fonctions utiles pour la création de la ROI par voisinnage
+
     def findPointsByVoisins(self, origin, degree):
+        "creer la zone d'interet autour de l'origine avec distande degree"
         self.intrestPoints = self.originalMesh.getAllVoisins(origin, degree)
         if(origin in self.intrestPoints):
             self.intrestPoints.remove(origin)
         self.intrestPoints.append(origin) # i force the origin point to be the last index in interest zone
-        #print(self.intrestPoints)
-
         for index in self.intrestPoints:
             self.getFacesInInterestZone(index)
         self.numberOfPoints = len(self.intrestPoints)
@@ -59,6 +63,8 @@ class IntrestZone:
                     self.faces.append(face)
 
 
+#Fonction utiles pour le solveur
+
     def computeMatrixA(self, nbPointsHandle=1):
         "return Matrice A de à minimiser definie dans le papier"
         matrix = []
@@ -72,9 +78,8 @@ class IntrestZone:
             matrix.append(lastLigne+ligneMatrixI)
         return matrix
 
-    #return delta x, y, z:le debut des vecteurs bx; by, bz defini dans le papier pour 1 SEUL point déplacé
-
-    def delta2(self):
+    def delta(self):
+        "calcule les coordonnées laplaciennes pour la ROI, utilisées pour le b de la minimisation"
         box =[self.originalMesh.points[e][0] for e in self.intrestPoints]
         boy =[self.originalMesh.points[e][1] for e in self.intrestPoints]
         boz =[self.originalMesh.points[e][2] for e in self.intrestPoints]
@@ -82,22 +87,23 @@ class IntrestZone:
         bx = list(A.dot(box))
         by = list(A.dot(boy))
         bz = list(A.dot(boz))
-
         return bx, by, bz
 
+#Pour l'affichage de la zone
+
     def getPositions(self):
+        "renvoie les positions de la zone"
         output = []
         compteur = 0
-        # print("poistions indexs = " + str(self.intrestPoints))
         for vertexIndex in self.intrestPoints:
             self.dictFaces[vertexIndex] = compteur
             for coord in self.originalMesh.points[vertexIndex]:
                 output.append(float(coord))
             compteur += 1
-        # print(self.dictFaces)
         return tuple(output)
 
     def getFaces(self):
+        "renvoie les face de la zone pour l'affichage"
         output = []
         for face in self.faces:
             goodFace =True
@@ -107,17 +113,4 @@ class IntrestZone:
             if(goodFace):
                 for index in face:
                     output.append(self.dictFaces[index])
-        # for i in range(len(output)):
-        #     output[i] =
-        # print("faces = " + str(output))
         return output
-
-
-
-
-
-
-
-
-    def draw(self):
-        print(self.intrestPoints)
