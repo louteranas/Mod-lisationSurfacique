@@ -41,6 +41,7 @@ class IntrestZone:
 
 
     def getFacesInInterestZone(self, vertexIndex):
+        "retourne les faces de la ROI pour l'affichage du début ave Pygame qui fonctionne à l'ensimagw"
         for face in self.originalMesh.facesIndexs:
             if(vertexIndex in face):
                 index = face.index(vertexIndex)
@@ -51,39 +52,21 @@ class IntrestZone:
                 if goodFace:
                     self.faces.append(face)
 
-    #return Matrice defini dans le papier pour 1 SEUL point déplacé
-    def computeMatrixA(self):
-        #matrix = np.identity(self.numberOfPoints)
+
+    def computeMatrixA(self, nbPointsHandle=1):
+        "return Matrice A de à minimiser definie dans le papier"
         matrix = []
         LaplaMatrix = self.originalMesh.computeLaplacianMatrix()
         for point in self.intrestPoints:
-        #for point in self.intrestPoints[:-1]:
-            #matrix[k] = [self.originalMesh.adjacentMatrix[point] for point in self.intrestPoints]
             matrix.append([LaplaMatrix[point][e] for e in self.intrestPoints])
-        lastLigne =[0 for _ in range(self.numberOfPoints-1)]
-        lastLigne.append(1)
-        #print(lastLigne)
-        matrix.append(lastLigne)
-        #print("taille matrix ", len(matrix), len(matrix[0]))
-        #print("matrix: ", matrix)
-
+        lastLigne =[0 for _ in range(self.numberOfPoints-nbPointsHandle)]
+        for i in range(nbPointsHandle):
+            ligneMatrixI = [0] * nbPointsHandle
+            ligneMatrixI[i] = 1
+            matrix.append(lastLigne+ligneMatrixI)
         return matrix
 
     #return delta x, y, z:le debut des vecteurs bx; by, bz defini dans le papier pour 1 SEUL point déplacé
-    def delta(self):
-        LaplacianVertices = self.originalMesh.computeLaplacianVertices()
-
-        box =[self.originalMesh.points[e][0] for e in self.intrestPoints[:-1]]
-        boy =[self.originalMesh.points[e][1] for e in self.intrestPoints[:-1]]
-        boz =[self.originalMesh.points[e][2] for e in self.intrestPoints[:-1]]
-
-        bx = [LaplacianVertices[e][0] for e in self.intrestPoints]
-        by = [LaplacianVertices[e][1] for e in self.intrestPoints]
-        bz = [LaplacianVertices[e][2] for e in self.intrestPoints]
-        # print("bx ", box, bx, "\n")
-        # print("by ", boy, by, "\n")
-        # print("bz ", boz, bz, "\n")
-        return bx, by, bz
 
     def delta2(self):
         box =[self.originalMesh.points[e][0] for e in self.intrestPoints]
@@ -95,19 +78,19 @@ class IntrestZone:
         bz = list(A.dot(boz))
 
         return bx, by, bz
-    
+
     def getPositions(self):
         output = []
         compteur = 0
         # print("poistions indexs = " + str(self.intrestPoints))
         for vertexIndex in self.intrestPoints:
             self.dictFaces[vertexIndex] = compteur
-            for coord in self.originalMesh.points[vertexIndex]:    
+            for coord in self.originalMesh.points[vertexIndex]:
                 output.append(float(coord))
             compteur += 1
         # print(self.dictFaces)
         return tuple(output)
-    
+
     def getFaces(self):
         output = []
         for face in self.faces:
@@ -116,7 +99,7 @@ class IntrestZone:
                 if(index not in self.intrestPoints):
                     goodFace = False
             if(goodFace):
-                for index in face:    
+                for index in face:
                     output.append(self.dictFaces[index])
         # for i in range(len(output)):
         #     output[i] =

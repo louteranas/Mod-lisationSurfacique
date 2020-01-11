@@ -93,6 +93,7 @@ class Mesh:
         return [self.points[i] for i in listeIndexPoints]
 
     def createHandle(self,listePointsHandle, newPointPos):
+        "renvoie des nouvelles coordonnées auto"
         newListePointsHandle = []
         for point in listePointsHandle:
             newListePointsHandle.append(tuple(map(lambda i, j: i*0.9 + j*0.1, newPointPos, point)))
@@ -121,7 +122,8 @@ class Mesh:
                 allVoisins.append(voisin)
         allVoisins = list(set(allVoisins))
         #on met le point en question à la fin
-        allVoisins.remove(index)
+        if (index in allVoisins):
+            allVoisins.remove(index)
         allVoisins.append(index)
 
         return allVoisins

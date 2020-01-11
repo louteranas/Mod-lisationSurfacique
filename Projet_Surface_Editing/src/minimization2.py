@@ -9,35 +9,39 @@ import numpy as np
 
 import scipy
 
-def minimization2(monMesh, maZone, originPointIndex, nouveauPoint, boolTi, typeSolveur=1):
-    A = np.array(maZone.computeMatrixA())
+
+
+def minimizationHandle(monMesh, maZone, originPointIndex, newListePointsHandle, boolTi=False, typeSolveur=True):
+    "lance le calcule des nouveau points avec le mesh la ROI, le point centrale du handle,\
+     la nouvelle possition des points du handle, un bool pour utiliser ou non les Ti, et un autre pour le choix du solveur (facultatif) "
+
+    #créatiuon de la matrice A
+    A = np.array(maZone.computeMatrixA(len(newListePointsHandle)))
     matriceMin = A.transpose().dot(A) #AtA
-    #bx, by, bz = maZone.delta()
-    if boolTi ==False:
-        bx, by, bz = maZone.delta2()
-    else:
-        bx, by, bz = newB(monMesh, maZone, originPointIndex, nouveauPoint, bx, by, bz)
-    bx.append(nouveauPoint[0])
-    by.append(nouveauPoint[1])
-    bz.append(nouveauPoint[2])
+
+    #creation du vecteur b de la minimisation
+    bx, by, bz = maZone.delta2()
+    #si demandé calcul b avec l'amélioration des Ti
+    if boolTi == True:
+        bx, by, bz = newB(monMesh, maZone, originPointIndex, newListePointsHandle[-1], bx, by, bz)
+    #ajout de la fin des élements du b correspondant aux points du Handle
+    for point in newListePointsHandle:
+        bx.append(point[0])
+        by.append(point[1])
+        bz.append(point[2])
 
 
 
     #choix du solveur
-    if typeSolveur == 1:
+    if typeSolveur == True:
         # solveur 1
         xx = np.linalg.solve(matriceMin, (A.transpose()).dot(bx))
         xy = np.linalg.solve(matriceMin, (A.transpose()).dot(by))
         xz = np.linalg.solve(matriceMin, (A.transpose()).dot(bz))
-    elif typeSolveur == 2:
+    else:
         # solveur 2
         xx = np.linalg.inv(matriceMin).dot(A.transpose().dot(bx))
         xy = np.linalg.inv(matriceMin).dot(A.transpose().dot(by))
         xz = np.linalg.inv(matriceMin).dot(A.transpose().dot(bz))
-    else:
-        # solveur 3
-        xx = scipy.linalg.solve(A, bx)
-        xy = scipy.linalg.solve(A, by)
-        xz = scipy.linalg.solve(A, bz)
-        
+
     return [xx, xy, xz]
