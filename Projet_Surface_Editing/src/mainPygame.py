@@ -3,7 +3,7 @@
 from mesh import Mesh
 from intrestZone import IntrestZone
 import sys
-from affichage import *
+from affichagePygame import *
 
 from minimization import *
 

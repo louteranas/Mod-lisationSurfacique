@@ -4,7 +4,7 @@ from mesh import Mesh
 from intrestZone import IntrestZone
 from amelioration import newB
 import sys
-from affichagePoor import *
+from affichagePygame import *
 import numpy as np
 
 import scipy

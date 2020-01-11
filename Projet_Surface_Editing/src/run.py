@@ -10,27 +10,45 @@ import copy
 
 from minimization import *
 
-###### Mesh definitin
+
+################################################### INITIALISATION #####################################
+
+###### Visualisation Window
+cubeWindow = pyglet.window.Window(width = 1200, height = 1200)
+
+
+###### Mesh definition
+# the original mesh is defined to go back in case of reset
 originalMesh = Mesh()
 originalMesh.parseEntry(sys.argv[1]) if len(sys.argv) > 1 else originalMesh.parseEntry()
+# The mesh used during simulation
 myMesh = copy.deepcopy(originalMesh)
 
 ##### Handle point index
-originIndex = 400
+originIndex = 235
 
 
 
 ##### Interest Zone
+# same for zone and originalZone
 originalZone = IntrestZone(originalMesh)
 zone = IntrestZone(myMesh)
 tailleHandle = 0 
 zoneSize = 0
+# we use these as global variables in order to have an interactive 
+# visualization and to modify the mesh multiple times 
 handleZone = IntrestZone(myMesh)
 handleZone.findPointsByVoisins(originIndex, tailleHandle)
 zone.findPointsByVoisins(originIndex, zoneSize)
 modified = False
+
+
+
+################################################### FUNCTIONS ############################################
         
+
 def modifyMesh(myMesh, coordx, coordy):
+    "this function takes the mesh, and coordinates of arrival point to modify the mesh"
     global modified
     global zone
     global tailleHandle
@@ -38,20 +56,23 @@ def modifyMesh(myMesh, coordx, coordy):
     listPoints = []
     if(tailleHandle == 0):
         sauvPoint = myMesh.points[originIndex]
-        newPointPos = (myMesh.points[originIndex][0]+coordx, myMesh.points[originIndex][1]+ coordy, myMesh.points[originIndex][2])
+        newPointPos = (myMesh.points[originIndex][0]-1, myMesh.points[originIndex][1]+ 1, myMesh.points[originIndex][2]+10)
+        # newPointPos = (myMesh.points[originIndex][0]+coordx, myMesh.points[originIndex][1]+ coordy, myMesh.points[originIndex][2])
         listPoints.append(newPointPos)
     elif(tailleHandle > 0):
         newPointPos = (myMesh.points[originIndex][0]+coordx, myMesh.points[originIndex][1]+ coordy, myMesh.points[originIndex][2])
         listePointsHandle = handleZone.intrestPoints
         sauvListePointsHandle = myMesh.getCoordonneesListePoints(listePointsHandle)
         listPoints = myMesh.createHandle(sauvListePointsHandle, newPointPos)
-    res = minimizationHandle(myMesh, zone, originIndex, listPoints)
+    res = minimizationHandle(myMesh, zone, originIndex, listPoints, True)
     for i in range(zone.numberOfPoints):
          myMesh.points[zone.intrestPoints[i]] = (res[0][i], res[1][i], res[2][i])
     modified = True
     return IntrestZone
 
+
 def showInterestZone():
+    "this function shows the handle and ROI on top of the mesh with green and red colors resp."
     global zone
     global zoneSize
     global handleZone
@@ -62,10 +83,11 @@ def showInterestZone():
     pyglet.graphics.draw_indexed(int(len(points)/3), pyglet.gl.GL_TRIANGLES, zone.getFaces(), ('v3f', points), ('c3B', tuple([255,0,0]*int(len(points)/3))))
     pyglet.graphics.draw_indexed(int(len(handlePoints)/3), pyglet.gl.GL_TRIANGLES, handleZone.getFaces(), ('v3f', handlePoints), ('c3B', tuple([0,255,0]*int(len(handlePoints)/3))))
 
-
-cubeWindow = pyglet.window.Window(width = 1200, height = 1200)
+"this function shows the handle and ROI on top of the mesh with green and red colors resp."
 @cubeWindow.event
 def on_show():
+    "this function intializes the window for the first time."
+
     pyglet.gl.glClear(pyglet.gl.GL_COLOR_BUFFER_BIT | pyglet.gl.GL_DEPTH_BUFFER_BIT)
     # Set up projection matrix.
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
@@ -79,6 +101,7 @@ def on_show():
 
 @cubeWindow.event
 def on_draw():
+    "this function draws the scene at each frame"
     global modified
     global zone
     global tailleHandle
@@ -91,6 +114,7 @@ def on_draw():
 
 @cubeWindow.event
 def on_mouse_scroll(x, y, scroll_x, scroll_y):
+    "this function uses Scrolling to zoom in and out in the window"
     cubeWindow.clear()
     if scroll_y > 0:
         pyglet.gl.glTranslatef( 0, 0, 0.9)#0.05)
@@ -99,6 +123,7 @@ def on_mouse_scroll(x, y, scroll_x, scroll_y):
 
 @cubeWindow.event
 def on_mouse_drag(x, y, dx, dy, button, modifiers):
+    "this function uses RIGHT mouse key to move around the scene and LEFT and MIDDLE for rotation"
     cubeWindow.clear()
     if(button == pyglet.window.mouse.RIGHT):
         if dx > 0:
@@ -127,6 +152,7 @@ def on_mouse_drag(x, y, dx, dy, button, modifiers):
             pyglet.gl.glRotatef(-3*dy/4, 0, 0, 1)
 
 def mouse_to_3d(x, y, z = 1.0, local_transform = False):
+    "this function transforms the mouse click coords in the screen to world coordinates"
     x = float(x)
     y = float(y)
     pmat = (GLdouble * 16)()
@@ -144,6 +170,7 @@ def mouse_to_3d(x, y, z = 1.0, local_transform = False):
 
 @cubeWindow.event
 def on_mouse_press(x, y, button, modifiers):
+    "this function uses LEFT click and crtl key to choose the arrival point"
     cubeWindow.clear()
     a = (GLuint * 1)(0)
     glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, a)
@@ -151,11 +178,16 @@ def on_mouse_press(x, y, button, modifiers):
         sphere = gluNewQuadric()
         gluSphere(sphere,0.01,10,10)
         worldCoords= mouse_to_3d(x, y)
-        modifyMesh(myMesh, worldCoords[0]/50, worldCoords[1]/50)
+        modifyMesh(myMesh, worldCoords[0]/23, worldCoords[1]/50)
 
 
 @cubeWindow.event
 def on_key_press(symbol, modifiers):
+    "this function uses A and Q to go to and from wireFrame mode, \
+    Up and Down to change the size of the ROI \
+    LEFT and RIGHT to change the origin point for modification \
+    N and B to change the origin point for modification FAST \
+    I and K to change the size of the Handle"
     global zone
     global handleZone
     global zoneSize
@@ -189,11 +221,14 @@ def on_key_press(symbol, modifiers):
 
     if(symbol == pyglet.window.key.K):
         tailleHandle -= 1
+        if(tailleHandle < 0):
+            tailleHandle = 0
         handleZone.reset()
         handleZone.findPointsByVoisins(originIndex, tailleHandle)
     
     if(symbol == pyglet.window.key.RIGHT):
-        originIndex += 1    
+        originIndex += 1
+        print(originIndex)    
         handleZone.reset()
         handleZone.findPointsByVoisins(originIndex, tailleHandle)
         zone.reset()
@@ -201,6 +236,7 @@ def on_key_press(symbol, modifiers):
 
     if(symbol == pyglet.window.key.LEFT):
         originIndex -= 1
+        print(originIndex)
         handleZone.reset()
         handleZone.findPointsByVoisins(originIndex, tailleHandle)
         zone.reset()
@@ -208,6 +244,7 @@ def on_key_press(symbol, modifiers):
 
     if(symbol == pyglet.window.key.N):
         originIndex += 100
+        print(originIndex)
         originIndex = originIndex%myMesh.numberOfPoints
         handleZone.reset()
         handleZone.findPointsByVoisins(originIndex, tailleHandle)
@@ -216,6 +253,7 @@ def on_key_press(symbol, modifiers):
 
     if(symbol == pyglet.window.key.B):
         originIndex -= 100
+        print(originIndex)
         originIndex = originIndex%myMesh.numberOfPoints
         handleZone.reset()
         handleZone.findPointsByVoisins(originIndex, tailleHandle)
