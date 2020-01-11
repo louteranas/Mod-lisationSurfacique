@@ -18,6 +18,12 @@ class IntrestZone:
                          pow(originPoint[1] - endPoint[1], 2) +\
                          pow(originPoint[2] - endPoint[2], 2))
 
+    def reset(self):
+        self.numberOfPoints = 0
+        self.intrestPoints = [] #list d'indice points (copie des poins du mesh original)
+        self.faces = [] #indices des face sur le mesh original
+        self.dictFaces = {}
+    
     def findPointsBydistance(self, origin, distance):
         for index, point in enumerate(self.originalMesh.points):
             if(self.computeDistance(origin, point) < distance):
